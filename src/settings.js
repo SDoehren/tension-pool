@@ -1,34 +1,37 @@
 
 
 export const registerSettings = function () {
-
-    game.settings.register("tension-pool", "combatfocus", {
-        name: "Combat Focus",
-        hint:"Focus camera on current combatant on turn change.",
-        scope: "client",
-        config: true,
-        default: true,
-        type: Boolean
-    });
-
-    game.settings.register("tension-pool", "paddingsq", {
-        name: "Padding (squares)",
-        hint:"Padding added to view area in all directions. Highly Recommended to be set to >2 and will have no effect <1.",
-        scope: "client",
-        config: true,
-        default: 12,
+    game.settings.register("tension-pool", "diceinpool", {
+        name: "dice in pool",
+        scope: "world",
+        config: false,
+        default: 0,
         type: Number
     });
 
-    game.settings.register("tension-pool", "Button-GMControl", {
-        name: "Button - GMControl",
-        hint: "Toggles button visiblity",
-        scope: "client",
+    game.settings.register("tension-pool", "maxdiceinpool", {
+        name: "Max Dice in Pool",
+        scope: "world",
         config: true,
-        default: false,
-        type: Boolean,
-        onChange: () => {
-            location.reload();
-        }
+        default: 6,
+        type: Number
     });
+
+
+    game.settings.register("tension-pool", "dicesize", {
+        name: "Dice Size:",
+        scope: "world",
+        config: true,
+        default: "dt6",
+        type: String,
+        choices: {
+            d4: "d4",
+            dt6: "d6 (special)",
+            d8: "d8",
+            d10: "d10",
+            d12: "d12",
+            d20: "d20",
+        },
+    });
+
 };
