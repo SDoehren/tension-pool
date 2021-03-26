@@ -32,7 +32,7 @@ Hooks.once('init', async () => {
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
     console.log(dice3d);
-    dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "default");
+    dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "force");
 
     console.log(dice3d.addDicePreset);
     dice3d.addDicePreset({
@@ -92,11 +92,12 @@ async function rollpool(dice,message){
 
 
     Ro.evaluate()
-    let outcome = Ro.terms[0].results.map(d => d.result).sort()
+
     if (game.modules.get("dice-so-nice") !== undefined){
         await game.dice3d.showForRoll(Ro,game.user,true,null)
     }
 
+    let outcome = Ro.terms[0].results.map(d => d.result).sort()
 
     var i;
     let complication = false

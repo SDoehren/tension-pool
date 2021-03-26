@@ -4,7 +4,7 @@
 
 
 [![Github all releases](https://img.shields.io/github/downloads/sdoehren/tension-pool/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/sdoehren/tension-pool/v0.0.01/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/sdoehren/tension-pool/latest/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
 
 
 [![GitHub issues](https://img.shields.io/github/issues/sdoehren/tension-pool.svg)](https://GitHub.com/sdoehren/tension-pool/issues/)
