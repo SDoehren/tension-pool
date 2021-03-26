@@ -9,12 +9,19 @@ function messages(data){
 }
 
 function sendmessage(message){
-    ui.notifications.info("Tension Pool | "+message);
-    ChatMessage.create({content:message},{});
-    game.socket.emit('module.tension-pool', {
-                message: message
-            });
 
+    let outputto = game.settings.get("tension-pool",'outputto');
+
+    if (outputto === 'both' || outputto === 'notfications' ) {
+        ui.notifications.info("Tension Pool | " + message);
+        game.socket.emit('module.tension-pool', {
+            message: message
+        });
+    }
+
+    if (outputto === 'both' || outputto === 'chatlog' ) {
+        ChatMessage.create({content: message}, {});
+    }
 }
 
 Hooks.once('init', async () => {
@@ -30,7 +37,8 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     console.log(dice3d.addDicePreset);
     dice3d.addDicePreset({
       type:"dt6",
-      labels:["!","","","","","",],
+      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
       system: "TensionDie",
         colorset:"TPD",
     });
@@ -44,7 +52,8 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
 		background:'#000000',
 		outline:'black',
 		edge:'#940202',
-		texture:'none'
+		texture:'none',
+        font:"Bradley Hand",
 	},"no");
 
     console.log(dice3d);
@@ -85,7 +94,7 @@ async function rollpool(dice,message){
     Ro.evaluate()
     let outcome = Ro.terms[0].results.map(d => d.result).sort()
     if (game.modules.get("dice-so-nice") !== undefined){
-        await game.dice3d.showForRoll(Ro)
+        await game.dice3d.showForRoll(Ro,game.user,true,null)
     }
 
 
@@ -102,11 +111,10 @@ async function rollpool(dice,message){
     if (complication){
         mess = "<strong style='color:red'>!</strong>";
     } else {
-        mess = "You are safe for now!"
+        mess = "You are safe for now."
     }
 
-    ChatMessage.create({content:mess},{});
-
+    sendmessage(mess)
 
     game.settings.set("tension-pool",'diceinpool',0);
 }

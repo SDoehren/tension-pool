@@ -12,7 +12,7 @@
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/sdoehren)
 
-Tension Pool is a Foundry Implementation of the Angry GM's concept of [Time Pools/Tension Pools](https://theangrygm.com/making-things-complicated/).
+Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of [Time Pools/Tension Pools](https://theangrygm.com/making-things-complicated/).
 
 
 ## Instructions

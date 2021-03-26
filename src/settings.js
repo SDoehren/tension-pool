@@ -34,4 +34,18 @@ export const registerSettings = function () {
         },
     });
 
+    game.settings.register("tension-pool", "outputto", {
+        name: "Where to announce updates:",
+        scope: "world",
+        config: true,
+        default: "both",
+        type: String,
+        choices: {
+            both: "both",
+            notfications: "notfications",
+            chatlog: "chatlog",
+        },
+    });
+
+
 };
