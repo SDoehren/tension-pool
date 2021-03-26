@@ -25,6 +25,8 @@ The third fills and then rolls the dice pool.
 
 ## Change log
 
+#### 0.0.03 - First Release
+
 #### 0.0.02 - Initial
 
 - First Version
