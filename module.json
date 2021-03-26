@@ -14,5 +14,11 @@
   "readme": "https://raw.githubusercontent.com/SDoehren/tension-pool/main/README.md",
   "socket": true,
   "allowBugReporter": true,
-  "bugs": "https://github.com/SDoehren/tension-pool/issues"
+  "bugs": "https://github.com/SDoehren/tension-pool/issues",
+  "dependencies": [
+      {
+        "name": "dice-so-nice",
+        "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/raw/3.3.2/module/module.json"
+      }
+    ]
 }
