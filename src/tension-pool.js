@@ -110,9 +110,9 @@ async function rollpool(dice,message){
 
     let mess;
     if (complication){
-        mess = "<strong style='color:red'>!</strong>";
+        mess = game.settings.get("tension-pool",'DangerMessage')
     } else {
-        mess = "You are safe for now."
+        mess = game.settings.get("tension-pool",'SafeMessage')
     }
 
     sendmessage(mess)

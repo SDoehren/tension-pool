@@ -47,5 +47,21 @@ export const registerSettings = function () {
         },
     });
 
+    game.settings.register("tension-pool", "SafeMessage", {
+        name: "Message when no complication occurs:",
+        scope: "world",
+        config: true,
+        default: "You are safe for now.",
+        type: String,
+    });
+
+    game.settings.register("tension-pool", "DangerMessage", {
+        name: "Message when a complication does occurs:",
+        scope: "world",
+        config: true,
+        default: "<strong style='color:red'>Complication!</strong>",
+        type: String,
+    });
+
 
 };
