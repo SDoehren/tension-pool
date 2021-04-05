@@ -1,7 +1,19 @@
 import {registerSettings} from './settings.js';
 import {TensionDie} from './die.js';
+import {TensionLayer} from './tensionLayer.js';
 
 'use strict';
+
+function registerLayer() {
+  const layers = mergeObject(Canvas.layers, {
+    TensionLayer: TensionLayer
+  });
+  Object.defineProperty(Canvas, 'layers', {
+    get: function () {
+      return layers
+    }
+  });
+}
 
 function messages(data){
     console.log(data);
@@ -27,6 +39,7 @@ function sendmessage(message){
 Hooks.once('init', async () => {
     console.log('tension-pool | Initializing always-centred');
     registerSettings();
+    registerLayer();
     CONFIG.Dice.terms["t"] = TensionDie;
 });
 
@@ -59,9 +72,6 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
     console.log(dice3d);
 });
 
-
-
-
 Hooks.on("ready", () => {
     console.log('tension-pool | Ready');
 
@@ -72,6 +82,32 @@ Hooks.on("ready", () => {
 
 });
 
+async function updatedisplay(diceinpool){
+    let display = document.getElementById("TensionDice-Pool");
+    let pool = 'Tension Pool:';
+    let i;
+    for (i = 0; i < diceinpool; i++) {
+      pool+='<img src="modules/tension-pool/images/Danger.webp" alt="!" width="25" height="25">'
+    }
+    display.innerHTML = pool;
+}
+
+Hooks.on("renderChatLog", (app, html) => {
+  let pool = '<p id="TensionDice-Pool">Tension Pool</p>'
+
+  let footer = html.find(".directory-footer");
+
+  if (footer.length === 0) {
+    footer = $(`<footer class="directory-footer"></footer>`);
+    html.append(footer);
+  }
+  footer.append(pool);
+
+  let diceinpool = game.settings.get("tension-pool",'diceinpool');
+  updatedisplay(diceinpool);
+
+})
+
 async function adddie(){
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
     let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
@@ -79,14 +115,24 @@ async function adddie(){
     diceinpool +=1
     await sendmessage("Die Added to Pool ("+diceinpool+"/"+maxdiceinpool+")")
     game.settings.set("tension-pool",'diceinpool',diceinpool);
+
+    await updatedisplay(diceinpool);
+
     if (diceinpool>=maxdiceinpool){
         await rollpool(diceinpool,"Dice Pool Rolled and Emptied");
     }
 }
 
 async function rollpool(dice,message){
+    if (dice===0){
+        await sendmessage("Dice pool is empty and cannot be rolled")
+        return;
+    }
+
     await sendmessage(message)
     let dicesize = game.settings.get("tension-pool",'dicesize');
+
+
 
     let Ro = new Roll(dice+dicesize);
 
@@ -116,8 +162,13 @@ async function rollpool(dice,message){
     }
 
     sendmessage(mess)
-
-    game.settings.set("tension-pool",'diceinpool',0);
+    if (game.settings.get("tension-pool",'emptythepool')){
+        game.settings.set("tension-pool",'diceinpool',0);
+        await updatedisplay(0);
+    } else if (dice>=game.settings.get("tension-pool",'maxdiceinpool')){
+        game.settings.set("tension-pool",'diceinpool',0);
+        await updatedisplay(0);
+    }
 }
 
 
@@ -141,7 +192,7 @@ Hooks.on("getSceneControlButtons", (controls) => {
             name: "tension-pool-rollpool",
             title: "Roll Dice Pool",
             icon: "fas fa-dice-six",
-            onClick: () => rollpool(game.settings.get("tension-pool",'diceinpool'),"Dice Pool Rolled and Emptied"),
+            onClick: () => rollpool(game.settings.get("tension-pool",'diceinpool'),"Dice Pool Rolled"),
             visible: game.user.isGM,
             button:true
         });

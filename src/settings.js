@@ -17,6 +17,15 @@ export const registerSettings = function () {
         type: Number
     });
 
+    game.settings.register("tension-pool", "emptythepool", {
+        name: "Empty the pool on non-full roll?",
+        hint:"Should the pool be emptied if it is rolled before Max Dice in Pool is reached.",
+        scope: "client",
+        config: true,
+        default: true,
+        type: Boolean
+    });
+
 
     game.settings.register("tension-pool", "dicesize", {
         name: "Dice Size:",
@@ -26,6 +35,7 @@ export const registerSettings = function () {
         type: String,
         choices: {
             d4: "d4",
+            d6: "d6 (normal)",
             dt6: "d6 (special)",
             d8: "d8",
             d10: "d10",
@@ -46,6 +56,8 @@ export const registerSettings = function () {
             chatlog: "chatlog",
         },
     });
+
+
 
     game.settings.register("tension-pool", "SafeMessage", {
         name: "Message when no complication occurs:",
