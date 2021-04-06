@@ -20,7 +20,16 @@ export const registerSettings = function () {
     game.settings.register("tension-pool", "emptythepool", {
         name: "Empty the pool on non-full roll?",
         hint:"Should the pool be emptied if it is rolled before Max Dice in Pool is reached.",
-        scope: "client",
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean
+    });
+
+    game.settings.register("tension-pool", "dropdie", {
+        name: "Drop a die on add?",
+        hint:"Roll a die to demostrate it being added to the pool. (Result is ignored)",
+        scope: "world",
         config: true,
         default: true,
         type: Boolean
@@ -44,8 +53,11 @@ export const registerSettings = function () {
         },
     });
 
+
+
     game.settings.register("tension-pool", "outputto", {
         name: "Where to announce updates:",
+        hint:"Pool Rolls outcomes are always output to chat.",
         scope: "world",
         config: true,
         default: "both",
@@ -73,6 +85,15 @@ export const registerSettings = function () {
         config: true,
         default: "<strong style='color:red'>Complication!</strong>",
         type: String,
+    });
+
+    game.settings.register("tension-pool", "outputsum", {
+        name: "Output sum?",
+        hint:"Replace calulation of the complication with a simple sum of the dice values.",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean
     });
 
 

@@ -16,7 +16,6 @@ function registerLayer() {
 }
 
 function messages(data){
-    console.log(data);
     ui.notifications.info("Tension Pool | "+data.message);
 }
 
@@ -36,6 +35,12 @@ function sendmessage(message){
     }
 }
 
+function sendmessageoveride(message){
+
+    ChatMessage.create({content: message}, {});
+
+}
+
 Hooks.once('init', async () => {
     console.log('tension-pool | Initializing always-centred');
     registerSettings();
@@ -44,10 +49,8 @@ Hooks.once('init', async () => {
 });
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-    console.log(dice3d);
     dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "force");
 
-    console.log(dice3d.addDicePreset);
     dice3d.addDicePreset({
       type:"dt6",
       labels:["modules/tension-pool/images/Danger.webp","","","","","",],
@@ -69,7 +72,6 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
         font:"Bradley Hand",
 	},"no");
 
-    console.log(dice3d);
 });
 
 Hooks.on("ready", () => {
@@ -83,12 +85,19 @@ Hooks.on("ready", () => {
 });
 
 async function updatedisplay(diceinpool){
+    console.log(diceinpool);
     let display = document.getElementById("TensionDice-Pool");
     let pool = 'Tension Pool:';
     let i;
     for (i = 0; i < diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/Danger.webp" alt="!" width="25" height="25">'
+      pool+='<img src="modules/tension-pool/images/Danger_Black.webp" alt="!Y" width="25" height="25">'
     }
+
+    for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
+      pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="!X" width="25" height="25">'
+    }
+
+
     display.innerHTML = pool;
 }
 
@@ -114,6 +123,15 @@ async function adddie(){
 
     diceinpool +=1
     await sendmessage("Die Added to Pool ("+diceinpool+"/"+maxdiceinpool+")")
+
+    if ((game.settings.get("tension-pool",'dropdie')) && (diceinpool < game.settings.get("tension-pool", 'maxdiceinpool'))){
+
+        let dicesize = game.settings.get("tension-pool",'dicesize');
+        let Ro = new Roll(1+dicesize);
+        Ro.evaluate()
+        game.dice3d.showForRoll(Ro, game.user, true, null);
+    }
+
     game.settings.set("tension-pool",'diceinpool',diceinpool);
 
     await updatedisplay(diceinpool);
@@ -129,46 +147,83 @@ async function rollpool(dice,message){
         return;
     }
 
-    await sendmessage(message)
+    await updatedisplay(dice);
+    await sendmessage(message);
+
     let dicesize = game.settings.get("tension-pool",'dicesize');
 
-
-
     let Ro = new Roll(dice+dicesize);
-
-
     Ro.evaluate()
 
-    if (game.modules.get("dice-so-nice") !== undefined){
-        await game.dice3d.showForRoll(Ro,game.user,true,null)
-    }
-
-    let outcome = Ro.terms[0].results.map(d => d.result).sort()
-
-    var i;
-    let complication = false
-    for (i = 0; i < outcome.length; i++) {
-      if (outcome[i] ===1){
-          complication=true
-
-      }
-    }
-
-    let mess;
-    if (complication){
-        mess = game.settings.get("tension-pool",'DangerMessage')
+    if (game.settings.get("tension-pool",'outputsum')){
+        let message = "Tension Pool"
+        Ro.toMessage({flavor: message},{},true)
     } else {
-        mess = game.settings.get("tension-pool",'SafeMessage')
+        await game.dice3d.showForRoll(Ro, game.user, true, null)
+
+        let outcome = Ro.terms[0].results.map(d => d.result).sort()
+
+        var i;
+        let complication = false
+        let compcount = 0
+
+        let rolltext = ""
+        let outcometext = "&nbsp;"
+
+        for (i = 0; i < outcome.length; i++) {
+            if (outcome[i] === 1) {
+                complication = true
+                compcount += 1
+                outcometext += "!"
+                rolltext += '<li class="roll die ' + dicesize + ' min">!</li>'
+            } else {
+                rolltext += '<li class="roll die ' + dicesize + '">&nbsp;</li>'
+            }
+        }
+
+        let mess;
+        if (complication) {
+            mess = game.settings.get("tension-pool", 'DangerMessage')
+        } else {
+            mess = game.settings.get("tension-pool", 'SafeMessage')
+        }
+
+
+        mess += `<div class="dice-roll">
+                    <div class="dice-result">
+                        <div class="dice-formula">`
+        mess += dice
+        mess += ` dice in pool</div>
+                        <div class="dice-tooltip" style="display: none;">
+                            <section class="tooltip-part">
+                                <div class="dice">
+                                    <header class="part-header flexrow">
+                                        <span class="part-formula">`
+        mess += dice
+        mess += ` dice in pool</span>
+                                        <span class="part-total">` + compcount + `</span>
+                                    </header>
+                                    <ol class="dice-rolls">`
+        mess += rolltext
+        mess += `</ol>
+                                </div>
+                            </section>
+                        </div>
+                    <h4 class="dice-total">` + outcometext + `</h4>
+                </div>
+            </div>`
+
+
+        sendmessageoveride(mess)
+    }
+    if (game.settings.get("tension-pool", 'emptythepool')) {
+        game.settings.set("tension-pool", 'diceinpool', 0);
+        await updatedisplay(0);
+    } else if (dice >= game.settings.get("tension-pool", 'maxdiceinpool')) {
+        game.settings.set("tension-pool", 'diceinpool', 0);
+        await updatedisplay(0);
     }
 
-    sendmessage(mess)
-    if (game.settings.get("tension-pool",'emptythepool')){
-        game.settings.set("tension-pool",'diceinpool',0);
-        await updatedisplay(0);
-    } else if (dice>=game.settings.get("tension-pool",'maxdiceinpool')){
-        game.settings.set("tension-pool",'diceinpool',0);
-        await updatedisplay(0);
-    }
 }
 
 
