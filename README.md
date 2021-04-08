@@ -27,6 +27,7 @@ The third fills and then rolls the dice pool.
 ## Planned updates
 
 - The introduction of a Fate Dice based system
+- Auto Roll on a Roll Table if a Complication occurs
 
 ## Change log
 
