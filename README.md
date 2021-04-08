@@ -31,6 +31,8 @@ The third fills and then rolls the dice pool.
 
 ## Change log
 
+#### 0.0.12 - Mitigating Forge issue
+
 #### 0.0.10 - QoL Improvements
 
 - Added permanent pool tracker

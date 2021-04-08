@@ -90,11 +90,11 @@ async function updatedisplay(diceinpool){
     let pool = 'Tension Pool:';
     let i;
     for (i = 0; i < diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/Danger_Black.webp" alt="!Y" width="25" height="25">'
+      pool+='<img src="https://raw.githubusercontent.com/SDoehren/tension-pool/master/images/Danger_black.webp" alt="!" width="25" height="25">'
     }
 
     for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="!X" width="25" height="25">'
+      pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="X" width="25" height="25">'
     }
 
 
