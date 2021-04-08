@@ -22,7 +22,7 @@ export const registerSettings = function () {
         hint:"Should the pool be emptied if it is rolled before Max Dice in Pool is reached.",
         scope: "world",
         config: true,
-        default: true,
+        default: false,
         type: Boolean
     });
 
@@ -60,7 +60,7 @@ export const registerSettings = function () {
         hint:"Pool Rolls outcomes are always output to chat.",
         scope: "world",
         config: true,
-        default: "both",
+        default: "notfications",
         type: String,
         choices: {
             both: "both",
