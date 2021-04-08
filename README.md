@@ -31,7 +31,7 @@ The third fills and then rolls the dice pool.
 
 ## Change log
 
-#### 0.0.05 - QoL Improvements
+#### 0.0.10 - QoL Improvements
 
 - Added permanent pool tracker
 - Added option to use normal d6 instead of the tension dice
