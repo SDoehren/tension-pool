@@ -15,10 +15,16 @@ function registerLayer() {
   });
 }
 
-function messages(data){
-    ui.notifications.info("Tension Pool | "+data.message);
-}
+function messages(data) {
+    if (data.datatype === "message") {
+        ui.notifications.info("Tension Pool | " + data.message);
+    }
 
+    if (data.datatype === "updatedisplay") {
+        updatedisplay(data.message)
+    }
+
+}
 function sendmessage(message){
 
     let outputto = game.settings.get("tension-pool",'outputto');
@@ -26,18 +32,18 @@ function sendmessage(message){
     if (outputto === 'both' || outputto === 'notfications' ) {
         ui.notifications.info("Tension Pool | " + message);
         game.socket.emit('module.tension-pool', {
-            message: message
+            message: message,datatype:"message"
         });
     }
 
     if (outputto === 'both' || outputto === 'chatlog' ) {
-        ChatMessage.create({content: message}, {});
+        ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
     }
 }
 
 function sendmessageoveride(message){
 
-    ChatMessage.create({content: message}, {});
+    ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
 
 }
 
@@ -86,6 +92,12 @@ Hooks.on("ready", () => {
 
 async function updatedisplay(diceinpool){
     console.log(diceinpool);
+    if (game.user.isGM) {
+        game.socket.emit('module.tension-pool', {
+            message: diceinpool, datatype: "updatedisplay"
+        });
+    }
+
     let display = document.getElementById("TensionDice-Pool");
     let pool = 'Tension Pool:';
     let i;
