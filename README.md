@@ -31,7 +31,7 @@ The third fills and then rolls the dice pool.
 
 ## Change log
 
-#### 0.0.13 - Fixed issue with updating on player screen
+#### 0.0.14 - Fixed issue with updating on player screen
 
 #### 0.0.12 - Mitigating Forge issue
 
