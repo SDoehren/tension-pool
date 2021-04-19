@@ -19,6 +19,11 @@
       {
         "name": "dice-so-nice",
         "manifest": "https://gitlab.com/riccisi/foundryvtt-dice-so-nice/raw/3.3.2/module/module.json"
+      },
+        {
+        "name": "_chatcommands",
+        "type": "module",
+        "manifest": "https://github.com/League-of-Foundry-Developers/Chat-Commands-Lib/releases/download/1.3.2/module.json"
       }
     ]
 }

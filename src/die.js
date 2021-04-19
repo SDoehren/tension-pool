@@ -8,7 +8,6 @@ export class TensionDie extends Die {
 
     /** @override */
     get total(){
-        console.log(this);
         let ones = this.results.map(r => r.result).filter(x => x==1).length;
         return ones;
     }

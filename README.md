@@ -18,18 +18,46 @@ Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of
 
 ## Instructions
 
-Once installed 3 new buttons will appear under the basic controls.  
+Can be controlled from scene controls or from chat commands
 
-The first adds a die to the dice pool.  
-The second rolls the dice pool with the current number of dice.  
-The third fills and then rolls the dice pool.
+## Chat Commands
+
+- /TPadddie - Adds a Die to the Pool
+- /TPremovedie - Remove Die from Pool
+- /TPemptypool - Empty the Pool (no roll)
+- /TProllpool - Roll Dice Pool
+- /TProllfullpool - Roll Dice Pool
 
 ## Planned updates
 
 - The introduction of a Fate Dice based system
 - Auto Roll on a Roll Table if a Complication occurs
+- Add controls to the pool below the chat
+
+## Hook Calls
+
+#### On Pool Roll
+
+Hooks.call("tension-poolRolled", dicerolled, diceleftinpool,complicationoccured);
+
+- dicerolled (int) - The dice rolled
+- diceleftinpool (int) - The dice left in the pool after the roll is complete
+- complicationoccured (bool) - whether a complication should occur
+
+#### On Change in Dice in Pool
+
+Hooks.call("tension-poolChange", diceinpool);
+
+- diceinpool (int) - The dice in the pool after dice added or removed
 
 ## Change log
+
+#### 0.0.2 - QoL Improvements
+
+- Hooks Calls added
+- Chat Commands added
+- Option to remove die added
+- Option to empty the pool without rolling added
 
 #### 0.0.14 - Fixed issue with updating on player screen
 

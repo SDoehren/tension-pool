@@ -9,6 +9,17 @@ export const registerSettings = function () {
         type: Number
     });
 
+    game.settings.register("tension-pool", "scenecontrols", {
+        name: "Enable Scene Controls?",
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+        onChange: () => {
+            location.reload();
+        }
+    });
+
     game.settings.register("tension-pool", "maxdiceinpool", {
         name: "Max Dice in Pool",
         scope: "world",

@@ -91,7 +91,7 @@ Hooks.on("ready", () => {
 });
 
 async function updatedisplay(diceinpool){
-    console.log(diceinpool);
+
     if (game.user.isGM) {
         game.socket.emit('module.tension-pool', {
             message: diceinpool, datatype: "updatedisplay"
@@ -114,20 +114,37 @@ async function updatedisplay(diceinpool){
 }
 
 Hooks.on("renderChatLog", (app, html) => {
-  let pool = '<p id="TensionDice-Pool">Tension Pool</p>'
+    let pool = '<p id="TensionDice-Pool">Tension Pool</p>'
 
-  let footer = html.find(".directory-footer");
+    let footer = html.find(".directory-footer");
 
-  if (footer.length === 0) {
+    if (footer.length === 0) {
     footer = $(`<footer class="directory-footer"></footer>`);
     html.append(footer);
-  }
-  footer.append(pool);
+    }
+    footer.append(pool);
 
-  let diceinpool = game.settings.get("tension-pool",'diceinpool');
-  updatedisplay(diceinpool);
+    let diceinpool = game.settings.get("tension-pool",'diceinpool');
+    updatedisplay(diceinpool);
 
 })
+
+async function removedie(){
+    let diceinpool = game.settings.get("tension-pool",'diceinpool');
+    let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
+
+    diceinpool -=1
+
+    if (diceinpool<0){
+        diceinpool=0
+    }
+
+
+    await sendmessage("Die Removed from Pool ("+diceinpool+"/"+maxdiceinpool+")")
+    game.settings.set("tension-pool",'diceinpool',diceinpool);
+    await updatedisplay(diceinpool);
+    Hooks.call("tension-poolChange", diceinpool);
+}
 
 async function adddie(){
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
@@ -146,11 +163,26 @@ async function adddie(){
 
     game.settings.set("tension-pool",'diceinpool',diceinpool);
 
+
     await updatedisplay(diceinpool);
+    Hooks.call("tension-poolChange", diceinpool);
 
     if (diceinpool>=maxdiceinpool){
         await rollpool(diceinpool,"Dice Pool Rolled and Emptied");
     }
+}
+
+async function emptypool(){
+    let diceinpool = game.settings.get("tension-pool",'diceinpool');
+    let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
+
+    diceinpool=0
+
+    await sendmessage("Dice Removed from Pool ("+diceinpool+"/"+maxdiceinpool+")")
+    game.settings.set("tension-pool",'diceinpool',diceinpool);
+
+    await updatedisplay(diceinpool);
+    Hooks.call("tension-poolChange", diceinpool);
 }
 
 async function rollpool(dice,message){
@@ -160,12 +192,18 @@ async function rollpool(dice,message){
     }
 
     await updatedisplay(dice);
+    if (dice!==game.settings.get("tension-pool",'diceinpool')){
+        Hooks.call("tension-poolChange", dice);
+    }
+
     await sendmessage(message);
 
     let dicesize = game.settings.get("tension-pool",'dicesize');
 
     let Ro = new Roll(dice+dicesize);
     Ro.evaluate()
+
+    let complication;
 
     if (game.settings.get("tension-pool",'outputsum')){
         let message = "Tension Pool"
@@ -176,7 +214,7 @@ async function rollpool(dice,message){
         let outcome = Ro.terms[0].results.map(d => d.result).sort()
 
         var i;
-        let complication = false
+        complication = false
         let compcount = 0
 
         let rolltext = ""
@@ -236,41 +274,130 @@ async function rollpool(dice,message){
         await updatedisplay(0);
     }
 
+    Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
 }
 
 
-
-
-
 Hooks.on("getSceneControlButtons", (controls) => {
-    const bar = controls.find((c) => c.name === "token");
+    if (game.user.isGM  && game.settings.get("tension-pool",'scenecontrols')) {
+        controls.push({
+            name: "Tension Pool Controls",
+            title: "Tension Pool Controls",
+            icon: "fas fa-dice",
+            layer: "TensionLayer",
+            visible: game.user.isGM,
+            tools: [
+                {
+                    name: "tension-pool-removedie",
+                    title: "Remove Die from Pool",
+                    icon: "fas fa-minus-square",
+                    onClick: () => removedie(),
+                    visible: game.user.isGM,
+                    button: true
+                },
+                {
+                    name: "tension-pool-adddie",
+                    title: "Add Dice to Pool",
+                    icon: "fas fa-plus-square",
+                    onClick: () => adddie(),
+                    visible: game.user.isGM,
+                    button: true
+                },
+                {
+                    name: "tension-pool-emptypool",
+                    title: "Empty the Pool (no roll)",
+                    icon: "fas fa-battery-empty",
+                    onClick: () => emptypool(),
+                    visible: game.user.isGM,
+                    button: true
+                },
+                {
+                    name: "tension-pool-rollpool",
+                    title: "Roll Dice Pool",
+                    icon: "fas fa-dice-six",
+                    onClick: () => rollpool(game.settings.get("tension-pool", 'diceinpool'), "Dice Pool Rolled"),
+                    visible: game.user.isGM,
+                    button: true
+                },
+                {
+                    name: "tension-pool-rollfullpool",
+                    title: "Roll Full Dice Pool",
+                    icon: "fas fa-dice",
+                    onClick: () => rollpool(game.settings.get("tension-pool", 'maxdiceinpool'), "Dice Pool Filled, Rolled and Emptied"),
+                    visible: game.user.isGM,
+                    button: true
+                },
+            ],
+        });
 
-    if (game.user.isGM) {
+
+        const bar = controls.find((c) => c.name === "token");
+
+
         bar.tools.push({
             name: "tension-pool-adddie",
             title: "Add Dice to Pool",
             icon: "fas fa-plus-square",
             onClick: () => adddie(),
             visible: game.user.isGM,
-            button:true
-        });
-
-        bar.tools.push({
-            name: "tension-pool-rollpool",
-            title: "Roll Dice Pool",
-            icon: "fas fa-dice-six",
-            onClick: () => rollpool(game.settings.get("tension-pool",'diceinpool'),"Dice Pool Rolled"),
-            visible: game.user.isGM,
-            button:true
-        });
-
-        bar.tools.push({
-            name: "tension-pool-rollfullpool",
-            title: "Roll Dice Full Pool",
-            icon: "fas fa-dice",
-            onClick: () => rollpool(game.settings.get("tension-pool",'maxdiceinpool'),"Dice Pool Filled, Rolled and Emptied"),
-            visible: game.user.isGM,
-            button:true
+            button: true
         });
     }
 });
+
+Hooks.on("chatCommandsReady", function(chatCommands) {
+
+    chatCommands.registerCommand(chatCommands.createCommandFromData({
+        commandKey: "/TPadddie",
+        invokeOnCommand: () => adddie(),
+        shouldDisplayToChat: false,
+        iconClass: "fas fa-minus-square",
+        description: "Tension Pool - Adds a Die to the Pool",
+        gmOnly: true
+    }));
+
+    chatCommands.registerCommand(chatCommands.createCommandFromData({
+        commandKey: "/TPremovedie",
+        invokeOnCommand: () => removedie(),
+        shouldDisplayToChat: false,
+        iconClass: "fas fa-minus-square",
+        description: "Tension Pool - Add Die to the Pool",
+        gmOnly: true
+    }));
+
+    chatCommands.registerCommand(chatCommands.createCommandFromData({
+        commandKey: "/TPremovedie",
+        invokeOnCommand: () => removedie(),
+        shouldDisplayToChat: false,
+        iconClass: "fas fa-minus-square",
+        description: "Tension Pool - Remove Die from Pool",
+        gmOnly: true
+    }));
+
+    chatCommands.registerCommand(chatCommands.createCommandFromData({
+        commandKey: "/TPemptypool",
+        invokeOnCommand: () => emptypool(),
+        shouldDisplayToChat: false,
+        iconClass: "fas fa-battery-empty",
+        description: "Tension Pool - Empty the Pool (no roll)",
+        gmOnly: true
+    }));
+
+    chatCommands.registerCommand(chatCommands.createCommandFromData({
+        commandKey: "/TProllpool",
+        invokeOnCommand: () => rollpool(game.settings.get("tension-pool",'diceinpool'),"Dice Pool Rolled"),
+        shouldDisplayToChat: false,
+        iconClass: "fas fa-dice-six",
+        description: "Tension Pool - Roll Dice Pool",
+        gmOnly: true
+    }));
+
+    chatCommands.registerCommand(chatCommands.createCommandFromData({
+        commandKey: "/TProllfullpool",
+        invokeOnCommand: () => rollpool(game.settings.get("tension-pool",'maxdiceinpool'),"Dice Pool Filled, Rolled and Emptied"),
+        shouldDisplayToChat: false,
+        iconClass: "fas fa-dice",
+        description: "Tension Pool - Roll Full Dice Pool",
+        gmOnly: true
+    }));
+})
