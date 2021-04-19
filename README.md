@@ -52,7 +52,7 @@ Hooks.call("tension-poolChange", diceinpool);
 
 ## Change log
 
-#### 0.0.2 - QoL Improvements
+#### 0.0.20 - QoL Improvements
 
 - Hooks Calls added
 - Chat Commands added
