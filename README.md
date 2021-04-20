@@ -40,8 +40,8 @@ Can be controlled from scene controls or from chat commands
 
 Hooks.call("tension-poolRolled", dicerolled, diceleftinpool,complicationoccured);
 
-- dicerolled (int) - The dice rolled
-- diceleftinpool (int) - The dice left in the pool after the roll is complete
+- dicerolled (int) - The number of dice rolled
+- diceleftinpool (int) - The number of dice left in the pool after the roll is complete
 - complicationoccured (bool) - whether a complication should occur
 
 #### On Change in Dice in Pool
