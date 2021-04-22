@@ -52,6 +52,8 @@ Hooks.call("tension-poolChange", diceinpool);
 
 ## Change log
 
+#### 0.0.21 - Extra Button Removed
+
 #### 0.0.20 - QoL Improvements
 
 - Hooks Calls added

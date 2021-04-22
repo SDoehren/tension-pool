@@ -329,19 +329,6 @@ Hooks.on("getSceneControlButtons", (controls) => {
                 },
             ],
         });
-
-
-        const bar = controls.find((c) => c.name === "token");
-
-
-        bar.tools.push({
-            name: "tension-pool-adddie",
-            title: "Add Dice to Pool",
-            icon: "fas fa-plus-square",
-            onClick: () => adddie(),
-            visible: game.user.isGM,
-            button: true
-        });
     }
 });
 
