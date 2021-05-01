@@ -55,7 +55,11 @@ Hooks.once('init', async () => {
 });
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-    dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "force");
+    if (game.settings.get("tension-pool",'dicesize') === "dt6") {
+        dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "force");
+    } else {
+        dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "default");
+    }
 
     dice3d.addDicePreset({
       type:"dt6",

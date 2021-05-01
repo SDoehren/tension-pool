@@ -49,6 +49,7 @@ export const registerSettings = function () {
 
     game.settings.register("tension-pool", "dicesize", {
         name: "Dice Size:",
+        hint:"d6 (!) will lock dice so nice to the uses of the tension pool dice set",
         scope: "world",
         config: true,
         default: "dt6",
@@ -56,12 +57,15 @@ export const registerSettings = function () {
         choices: {
             d4: "d4",
             d6: "d6 (normal)",
-            dt6: "d6 (special)",
+            dt6: "d6 (!)",
             d8: "d8",
             d10: "d10",
             d12: "d12",
             d20: "d20",
         },
+        onChange: () => {
+            location.reload();
+        }
     });
 
 
