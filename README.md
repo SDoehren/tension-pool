@@ -52,6 +52,8 @@ Hooks.call("tension-poolChange", diceinpool);
 
 ## Change log
 
+#### 0.0.30 - Fate Dice added
+
 #### 0.0.25 - Removed force on dice system
 
 #### 0.0.21 - Extra Button Removed

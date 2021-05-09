@@ -49,7 +49,7 @@ export const registerSettings = function () {
 
     game.settings.register("tension-pool", "dicesize", {
         name: "Dice Size:",
-        hint:"d6 (!) will lock dice so nice to the uses of the tension pool dice set",
+        hint:"d6 (!) will lock dice so nice to the uses of the tension pool dice set. Fate Die will always output the sum.",
         scope: "world",
         config: true,
         default: "dt6",
@@ -62,6 +62,7 @@ export const registerSettings = function () {
             d10: "d10",
             d12: "d12",
             d20: "d20",
+            df: "Fate",
         },
         onChange: () => {
             location.reload();

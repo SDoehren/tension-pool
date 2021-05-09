@@ -89,9 +89,6 @@ Hooks.on("ready", () => {
 
     console.log("tension-pool | Listener")
     game.socket.on('module.tension-pool', (data) => messages(data));
-
-
-
 });
 
 async function updatedisplay(diceinpool){
@@ -209,14 +206,17 @@ async function rollpool(dice,message){
 
     let complication;
 
-    if (game.settings.get("tension-pool",'outputsum')){
+    if (game.settings.get("tension-pool",'dicesize')==="df"){
+        let message = "Tension Pool"
+        Ro.toMessage({flavor: message},{},true)
+    } else if (game.settings.get("tension-pool",'outputsum')){
         let message = "Tension Pool"
         Ro.toMessage({flavor: message},{},true)
     } else {
         await game.dice3d.showForRoll(Ro, game.user, true, null)
 
         let outcome = Ro.terms[0].results.map(d => d.result).sort()
-
+        console.log(outcome);
         var i;
         complication = false
         let compcount = 0
