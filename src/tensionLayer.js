@@ -1,18 +1,15 @@
-
-
-
 export class TensionLayer extends PlaceablesLayer {
   constructor() {
     super();
   }
 
   static get layerOptions() {
-    return mergeObject(super.layerOptions, {
-      objectClass: Note,
-      sheetClass: NoteConfig,
+    return foundry.utils.mergeObject(super.layerOptions, {
+      name: "TensionLayer",
       canDragCreate: false,
       zIndex: 180
     });
   }
 
+  static documentName = "Note";
 }

@@ -5,14 +5,17 @@ import {TensionLayer} from './tensionLayer.js';
 'use strict';
 
 function registerLayer() {
-  const layers = mergeObject(Canvas.layers, {
-    TensionLayer: TensionLayer
-  });
-  Object.defineProperty(Canvas, 'layers', {
-    get: function () {
-      return layers
-    }
-  });
+    console.log(TensionLayer);
+
+    const layers = mergeObject(Canvas.layers, {
+        TensionLayer: TensionLayer
+    });
+    Object.defineProperty(Canvas, 'layers', {
+        get: function () {
+            return layers
+        }
+    });
+
 }
 
 function messages(data) {
@@ -48,7 +51,7 @@ function sendmessageoveride(message){
 }
 
 Hooks.once('init', async () => {
-    console.log('tension-pool | Initializing always-centred');
+    console.log('tension-pool | Initializing tension-pool | Version: '+game.data.version[2]);
     registerSettings();
     registerLayer();
     CONFIG.Dice.terms["t"] = TensionDie;
@@ -66,7 +69,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
       labels:["modules/tension-pool/images/Danger.webp","","","","","",],
         bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
       system: "TensionDie",
-        colorset:"TPD",
+        //colorset:"TPD",
     });
 
 
@@ -80,7 +83,7 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
 		edge:'#940202',
 		texture:'none',
         font:"Bradley Hand",
-	},"no");
+	},"default");
 
 });
 
@@ -115,7 +118,7 @@ async function updatedisplay(diceinpool){
 }
 
 Hooks.on("renderChatLog", (app, html) => {
-    let pool = '<p id="TensionDice-Pool">Tension Pool</p>'
+    let pool = '<p id="TensionDice-Pool" style="justify-content: center; align-items: center;">Tension Pool:</p>'
 
     let footer = html.find(".directory-footer");
 
@@ -159,7 +162,7 @@ async function adddie(){
         let dicesize = game.settings.get("tension-pool",'dicesize');
         let Ro = new Roll(1+dicesize);
         Ro.evaluate()
-        game.dice3d.showForRoll(Ro, game.user, true, null);
+            game.dice3d.showForRoll(Ro, game.user, false, null);
     }
 
     game.settings.set("tension-pool",'diceinpool',diceinpool);
@@ -391,4 +394,15 @@ Hooks.on("chatCommandsReady", function(chatCommands) {
         description: "Tension Pool - Roll Full Dice Pool",
         gmOnly: true
     }));
+})
+
+
+Hooks.on("renderSidebarTab", async(object, html) => {
+  if (object instanceof Settings) {
+    const details = html.find("#game-details");
+    const TensionDetails = document.createElement("li");
+    TensionDetails.classList.add("donation-link");
+    TensionDetails.innerHTML = "Tension Pool <a title='Donate' href='https://ko-fi.com/sdoehren'><img src='https://storage.ko-fi.com/cdn/cup-border.png'></a> <span><a href='https://github.com/SDoehren/tension-pool/issues'>Report issue</a></span>";
+    details.append(TensionDetails);
+  }
 })

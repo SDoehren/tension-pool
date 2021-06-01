@@ -8,10 +8,10 @@
 [![Github all releases](https://img.shields.io/github/downloads/sdoehren/tension-pool/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/sdoehren/tension-pool/latest/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
 
-[![ko-fi](https://img.shields.io/badge/ko--fi-Support%20Me-red)](https://ko-fi.com/sdoehren)
-[![Patreon](https://img.shields.io/badge/Patreon-Support%20Me-red)](https://www.patreon.com/bePatron?u=49614365)
+[![ko-fi](https://img.shields.io/badge/ko--fi-Support%20Me-red?style=flat-square&logo=ko-fi)](https://ko-fi.com/sdoehren)
+[![Patreon](https://img.shields.io/badge/Patreon-Support%20Me-red?style=flat-square&logo=patreon)](https://www.patreon.com/bePatron?u=49614365)
 
-[![The Forge](https://img.shields.io/badge/The%20Forge-Pay%20What%20You%20Want-success)](https://eu.forge-vtt.com/bazaar#package=tension-pool)
+[![The Forge](https://img.shields.io/badge/The%20Forge-Pay%20What%20You%20Want-success?style=flat-square)](https://eu.forge-vtt.com/bazaar#package=tension-pool)
 
 Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of [Time Pools/Tension Pools](https://theangrygm.com/making-things-complicated/).
 
@@ -51,6 +51,10 @@ Hooks.call("tension-poolChange", diceinpool);
 - diceinpool (int) - The dice in the pool after dice added or removed
 
 ## Change log
+
+#### 0.0.40 - 0.8.6 compatibility update
+
+#### 0.0.31 - Minor style change
 
 #### 0.0.30 - Fate Dice added
 
