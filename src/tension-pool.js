@@ -58,20 +58,6 @@ Hooks.once('init', async () => {
 });
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-    /*if (game.settings.get("tension-pool",'dicesize') === "dt6") {
-        dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "default");
-    } else {
-        dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "default");
-    }
-
-    dice3d.addDicePreset({
-      type:"dt6",
-      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-      system: "TensionDie",
-        //colorset:"TPD",
-    });*/
-
     let systemlist = Object.keys(dice3d.DiceFactory.systems)
 
     var i;
@@ -83,35 +69,6 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
           system: systemlist[i],
         });
     }
-
-
-    /*dice3d.addDicePreset({
-      type:"dt6",
-      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-      system: "standard",
-    });
-
-    dice3d.addDicePreset({
-      type:"dt6",
-      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-      system: "dot",
-    });
-
-    dice3d.addDicePreset({
-      type:"dt6",
-      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-      system: "dot_b",
-    });
-
-    dice3d.addDicePreset({
-      type:"dt6",
-      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-      system: "foundry_vtt",
-    });*/
 
 
     dice3d.addColorset({
@@ -147,7 +104,7 @@ async function updatedisplay(diceinpool){
     let pool = 'Tension Pool:';
     let i;
     for (i = 0; i < diceinpool; i++) {
-      pool+='<img src="https://raw.githubusercontent.com/SDoehren/tension-pool/master/images/Danger_black.webp" alt="!" width="25" height="25">'
+      pool+='<img src="modules/tension-pool/images/Danger_black.webp" alt="!" width="25" height="25">'
     }
 
     for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
@@ -218,10 +175,8 @@ async function adddie(){
 }
 
 async function emptypool(){
-    let diceinpool = game.settings.get("tension-pool",'diceinpool');
     let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
-
-    diceinpool=0
+    let diceinpool=0
 
     await sendmessage("Dice Removed from Pool ("+diceinpool+"/"+maxdiceinpool+")")
     game.settings.set("tension-pool",'diceinpool',diceinpool);
