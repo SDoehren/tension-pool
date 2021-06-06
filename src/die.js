@@ -1,5 +1,6 @@
 export class TensionDie extends Die {
     constructor(termData) {
+        console.log(JSON.stringify(termData));
         termData.faces=6;
         super(termData);
     }

@@ -58,8 +58,8 @@ Hooks.once('init', async () => {
 });
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-    if (game.settings.get("tension-pool",'dicesize') === "dt6") {
-        dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "force");
+    /*if (game.settings.get("tension-pool",'dicesize') === "dt6") {
+        dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "default");
     } else {
         dice3d.addSystem({id: "TensionDie", name: "Tension Dice"}, "default");
     }
@@ -70,7 +70,48 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
         bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
       system: "TensionDie",
         //colorset:"TPD",
+    });*/
+
+    let systemlist = Object.keys(dice3d.DiceFactory.systems)
+
+    var i;
+    for (i = 0; i < systemlist.length; i++) {
+      dice3d.addDicePreset({
+          type:"dt6",
+          labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+            bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+          system: systemlist[i],
+        });
+    }
+
+
+    /*dice3d.addDicePreset({
+      type:"dt6",
+      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+      system: "standard",
     });
+
+    dice3d.addDicePreset({
+      type:"dt6",
+      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+      system: "dot",
+    });
+
+    dice3d.addDicePreset({
+      type:"dt6",
+      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+      system: "dot_b",
+    });
+
+    dice3d.addDicePreset({
+      type:"dt6",
+      labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+        bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+      system: "foundry_vtt",
+    });*/
 
 
     dice3d.addColorset({
@@ -397,7 +438,7 @@ Hooks.on("chatCommandsReady", function(chatCommands) {
 })
 
 
-Hooks.on("renderSidebarTab", async(object, html) => {
+/*Hooks.on("renderSidebarTab", async(object, html) => {
   if (object instanceof Settings) {
     const details = html.find("#game-details");
     const TensionDetails = document.createElement("li");
@@ -405,4 +446,4 @@ Hooks.on("renderSidebarTab", async(object, html) => {
     TensionDetails.innerHTML = "Tension Pool <a title='Donate' href='https://ko-fi.com/sdoehren'><img src='https://storage.ko-fi.com/cdn/cup-border.png'></a> <span><a href='https://github.com/SDoehren/tension-pool/issues'>Report issue</a></span>";
     details.append(TensionDetails);
   }
-})
+})*/
