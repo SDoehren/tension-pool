@@ -52,6 +52,8 @@ Hooks.call("tension-poolChange", diceinpool);
 
 ## Change log
 
+#### 0.0.41 - Removed requirement to use Tension Die Dice System in Dice So Nice
+
 #### 0.0.40 - 0.8.6 compatibility update
 
 #### 0.0.31 - Minor style change
