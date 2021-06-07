@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0.0.46
+
+- d100 option added
+
 #### 0.0.45 - API added
 
 #### 0.0.41 - Removed requirement to use Tension Die Dice System in Dice So Nice

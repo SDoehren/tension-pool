@@ -62,6 +62,7 @@ export const registerSettings = function () {
             d10: "d10",
             d12: "d12",
             d20: "d20",
+            d100: "d100",
             df: "Fate",
         },
         onChange: () => {
