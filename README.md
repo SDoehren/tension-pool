@@ -34,21 +34,10 @@ Can be controlled from scene controls or from chat commands
 - Auto Roll on a Roll Table if a Complication occurs
 - Add controls to the pool below the chat
 
-## Hook Calls
+## Hook Calls and API
 
-#### On Pool Roll
+Hook Calls and API are available in a [separate document](api.md)
 
-Hooks.call("tension-poolRolled", dicerolled, diceleftinpool,complicationoccured);
-
-- dicerolled (int) - The number of dice rolled
-- diceleftinpool (int) - The number of dice left in the pool after the roll is complete
-- complicationoccured (bool) - whether a complication should occur
-
-#### On Change in Dice in Pool
-
-Hooks.call("tension-poolChange", diceinpool);
-
-- diceinpool (int) - The dice in the pool after dice added or removed
 
 ## Change log
 

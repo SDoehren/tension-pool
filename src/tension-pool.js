@@ -28,6 +28,7 @@ function messages(data) {
     }
 
 }
+
 function sendmessage(message){
 
     let outputto = game.settings.get("tension-pool",'outputto');
@@ -90,6 +91,11 @@ Hooks.on("ready", () => {
 
     console.log("tension-pool | Listener")
     game.socket.on('module.tension-pool', (data) => messages(data));
+
+    if(!game.settings.get("core", "noCanvas"))
+        game.tension = new Tension();
+
+
 });
 
 async function updatedisplay(diceinpool){
@@ -185,7 +191,7 @@ async function emptypool(){
     Hooks.call("tension-poolChange", diceinpool);
 }
 
-async function rollpool(dice,message){
+async function rollpool(dice,message,dicesize){
     if (dice===0){
         await sendmessage("Dice pool is empty and cannot be rolled")
         return;
@@ -198,14 +204,16 @@ async function rollpool(dice,message){
 
     await sendmessage(message);
 
-    let dicesize = game.settings.get("tension-pool",'dicesize');
+    if (dicesize===undefined) {
+        dicesize = game.settings.get("tension-pool",'dicesize');
+    }
 
     let Ro = new Roll(dice+dicesize);
     Ro.evaluate()
 
     let complication;
 
-    if (game.settings.get("tension-pool",'dicesize')==="df"){
+    if (dicesize==="df"){
         let message = "Tension Pool"
         Ro.toMessage({flavor: message},{},true)
     } else if (game.settings.get("tension-pool",'outputsum')){
@@ -279,7 +287,6 @@ async function rollpool(dice,message){
 
     Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
 }
-
 
 Hooks.on("getSceneControlButtons", (controls) => {
     if (game.user.isGM  && game.settings.get("tension-pool",'scenecontrols')) {
@@ -392,7 +399,28 @@ Hooks.on("chatCommandsReady", function(chatCommands) {
     }));
 })
 
+export class Tension {
 
+    async adddie(){
+        await adddie()
+    }
+
+    async removedie(){
+        await removedie()
+    }
+
+    async rollcurrentpool(){
+        await rollpool(game.settings.get("tension-pool", 'diceinpool'), "Dice Pool Rolled")
+    }
+
+    async rollfullpool(){
+        await rollpool(game.settings.get("tension-pool", 'maxdiceinpool'), "Dice Pool Filled, Rolled and Emptied")
+    }
+
+    async rollcustompool(dice,message,dicesize){
+        await rollpool(dice,message,dicesize)
+    }
+}
 /*Hooks.on("renderSidebarTab", async(object, html) => {
   if (object instanceof Settings) {
     const details = html.find("#game-details");
