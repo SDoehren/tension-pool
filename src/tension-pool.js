@@ -165,8 +165,8 @@ async function adddie(){
 
         let dicesize = game.settings.get("tension-pool",'dicesize');
         let Ro = new Roll(1+dicesize);
-        Ro.evaluate()
-            game.dice3d.showForRoll(Ro, game.user, false, null);
+        await Ro.evaluate({async:true})
+        game.dice3d.showForRoll(Ro, game.user, false, null);
     }
 
     game.settings.set("tension-pool",'diceinpool',diceinpool);
@@ -209,7 +209,7 @@ async function rollpool(dice,message,dicesize){
     }
 
     let Ro = new Roll(dice+dicesize);
-    Ro.evaluate()
+    await Ro.evaluate({async:true})
 
     let complication;
 
@@ -286,6 +286,8 @@ async function rollpool(dice,message,dicesize){
     }
 
     Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
+    console.log(complication);
+    return complication;
 }
 
 Hooks.on("getSceneControlButtons", (controls) => {
@@ -409,6 +411,10 @@ export class Tension {
         await removedie()
     }
 
+    async emptypool(){
+        await emptypool()
+    }
+
     async rollcurrentpool(){
         await rollpool(game.settings.get("tension-pool", 'diceinpool'), "Dice Pool Rolled")
     }
@@ -416,6 +422,14 @@ export class Tension {
     async rollfullpool(){
         await rollpool(game.settings.get("tension-pool", 'maxdiceinpool'), "Dice Pool Filled, Rolled and Emptied")
     }
+    /**
+     * Rolls a custom dice pool
+     *
+     * @returns {Promise<boolean>} where resolves true if a complication was rolled, false if not.
+     * @param dice (int) - the number of dice to be rolled
+     * @param message (str) - the message to be displayed in the notification/chat message
+     * @param dicesize (str, optional) - sets the size of dice to be used ("dt6" for Tension Dice's ! dice). Default: current dice size in settings
+     */
 
     async rollcustompool(dice,message,dicesize){
         await rollpool(dice,message,dicesize)
@@ -430,3 +444,4 @@ export class Tension {
     details.append(TensionDetails);
   }
 })*/
+

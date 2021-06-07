@@ -30,7 +30,6 @@ Can be controlled from scene controls or from chat commands
 
 ## Planned updates
 
-- The introduction of a Fate Dice based system
 - Auto Roll on a Roll Table if a Complication occurs
 - Add controls to the pool below the chat
 
