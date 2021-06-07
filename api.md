@@ -37,6 +37,6 @@ The API is called via game.tension; for example
 
 - dice (int) - the number of dice to be rolled
 - message (str) - the message to be displayed in the notification/chat message
-- dicesize (str, optional) - 
+- dicesize (str, optional) - sets the size of dice to be used ("dt6" for Tension Dice's ! dice).
 
 For example `game.tension.rollcustompool(10,"Custom Pool Rolling","d20")` will roll 10d20 and will display the message "Tension Pool | Custom Pool Rolling"
