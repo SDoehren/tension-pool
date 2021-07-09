@@ -52,37 +52,33 @@ function sendmessageoveride(message){
 }
 
 Hooks.once('init', async () => {
-    console.log('tension-pool | Initializing tension-pool | Version: '+game.data.version[2]);
+    console.log('tension-pool | Initializing tension-pool');
     registerSettings();
     registerLayer();
     CONFIG.Dice.terms["t"] = TensionDie;
 });
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
-    let systemlist = Object.keys(dice3d.DiceFactory.systems)
-
-    var i;
-    for (i = 0; i < systemlist.length; i++) {
-      dice3d.addDicePreset({
-          type:"dt6",
-          labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-            bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-          system: systemlist[i],
-        });
-    }
-
+    dice3d.addSystem({ id: "tension-pool", name: "Tension Pool" }, "default");
+    dice3d.addDicePreset({
+        type: "dt6",
+        labels: ["modules/tension-pool/images/Danger.webp", "", "", "", "", "",],
+        bumpMaps: ["modules/tension-pool/images/Danger_bump.webp", "", "", "", "", "",],
+        system: "tension-pool",
+        font: "Bradley Hand"
+    }, "d6");
 
     dice3d.addColorset({
-		name:'TPD',
-		description:'Tension Pool Dice',
-		category:'Tension Pool',
-		foreground:'#ffff00',
-		background:'#000000',
-		outline:'black',
-		edge:'#940202',
-		texture:'none',
-        font:"Bradley Hand",
-	},"default");
+        name: 'TPD',
+        description: 'Tension Pool Dice',
+        category: 'Tension Pool',
+        foreground: '#ffff00',
+        background: '#000000',
+        outline: 'black',
+        edge: '#940202',
+        texture: 'none',
+        font: "Bradley Hand",
+    }, "default");
 
 });
 
@@ -106,15 +102,26 @@ async function updatedisplay(diceinpool){
         });
     }
 
+    let displaywidth = $( "#TensionDice-Poolsect" ).width()
+
     let display = document.getElementById("TensionDice-Pool");
     let pool = 'Tension Pool:';
     let i;
+    let iz=0;
+
+
     for (i = 0; i < diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/Danger_black.webp" alt="!" width="25" height="25">'
+        pool+='<img src="modules/tension-pool/images/Danger_black.webp" alt="!" width="25" height="25">'
+        iz+=1;
+        if ((iz===9) && !(iz===diceinpool)){
+            pool+='<br>'
+        }
+
     }
 
     for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
-      pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="X" width="25" height="25">'
+        pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="X" width="25" height="25">'
+        iz+=1;
     }
 
 
@@ -122,12 +129,12 @@ async function updatedisplay(diceinpool){
 }
 
 Hooks.on("renderChatLog", (app, html) => {
-    let pool = '<p id="TensionDice-Pool" style="justify-content: center; align-items: center;">Tension Pool:</p>'
+    let pool = '<p id="TensionDice-Pool" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>'
 
     let footer = html.find(".directory-footer");
 
     if (footer.length === 0) {
-    footer = $(`<footer class="directory-footer"></footer>`);
+    footer = $(`<footer class="directory-footer" id="TensionDice-Poolsect"></footer>`);
     html.append(footer);
     }
     footer.append(pool);
@@ -254,7 +261,7 @@ async function rollpool(dice,message,dicesize){
                     <div class="dice-result">
                         <div class="dice-formula">`
         mess += dice
-        mess += ` dice in pool</div>
+        mess += ` </div>
                         <div class="dice-tooltip" style="display: none;">
                             <section class="tooltip-part">
                                 <div class="dice">
@@ -287,8 +294,29 @@ async function rollpool(dice,message,dicesize){
 
     Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
     console.log(complication);
+    if (complication){
+        if (game.settings.get("tension-pool",'MacroName').length !== 0) {
+            runmacro(game.settings.get("tension-pool",'MacroName'))
+        }
+    }
+
     return complication;
 }
+
+async function runmacro(macroname){
+
+    let targetmacro = game.macros.filter(x => x.name===macroname);
+
+    if (targetmacro.length===0){
+        ui.notifications.warn("Tension Pool | No macro with the name '"+macroname+"' found");
+        return;
+    } else if (targetmacro.length>1){
+        ui.notifications.warn("Tension Pool | Multiple macros with the name '"+macroname+"' found; using the first one found.");
+    }
+
+    targetmacro[0].execute()
+}
+
 
 Hooks.on("getSceneControlButtons", (controls) => {
     if (game.user.isGM  && game.settings.get("tension-pool",'scenecontrols')) {

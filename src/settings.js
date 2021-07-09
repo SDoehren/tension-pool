@@ -104,6 +104,15 @@ export const registerSettings = function () {
         type: String,
     });
 
+    game.settings.register("tension-pool", "MacroName", {
+        name: "Run Macro when Complication occurs:",
+        hint:"Enter name of Macro that should be run, leave blank to not run a macro. Macro name should be unique.",
+        scope: "world",
+        config: true,
+        default: "",
+        type: String,
+    });
+
     game.settings.register("tension-pool", "outputsum", {
         name: "Output sum?",
         hint:"Replace calulation of the complication with a simple sum of the dice values.",

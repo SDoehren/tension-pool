@@ -15,10 +15,17 @@
 
 Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of [Time Pools/Tension Pools](https://theangrygm.com/making-things-complicated/).
 
+## Install
+
+Available on the Forge and via the module directory within Foundry.
+
+Alternatively install via the manifest url: https://github.com/SDoehren/tension-pool/releases/latest/download/module.json
 
 ## Instructions
 
 Can be controlled from scene controls or from chat commands
+
+![Image](images/Guide1.webp)
 
 ## Chat Commands
 
@@ -30,7 +37,6 @@ Can be controlled from scene controls or from chat commands
 
 ## Planned updates
 
-- Auto Roll on a Roll Table if a Complication occurs
 - Add controls to the pool below the chat
 
 ## Hook Calls and API
@@ -42,6 +48,12 @@ Hook Calls and API are available in a [separate document](api.md)
 
 [Change log](Changelog.md)
 
+#### 0.0.46
+
+- d100 option added
+- Option to Trigger a macro when a complication occurs added
+- Minor Visual Improvements
+- Clicking the pool will now add a die
 
 
 ### Licence

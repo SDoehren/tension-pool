@@ -3,6 +3,9 @@
 #### 0.0.46
 
 - d100 option added
+- Option to Trigger a macro when a complication occurs added
+- Minor Visual Improvements
+- Clicking the pool will now add a die
 
 #### 0.0.45 - API added
 
