@@ -38,7 +38,7 @@ export function displaypopup() {
             },
             three: {
                 icon: '<i class="fab fa-patreon"></i>',
-                label: "Goto Patreon Now",
+                label: "Goto Patreon",
                 callback: () => window.open("https://www.patreon.com/sdoehren", '_blank')
             }
         },
