@@ -1,6 +1,7 @@
 import {registerSettings} from './settings.js';
 import {TensionDie} from './die.js';
 import {TensionLayer} from './tensionLayer.js';
+import {displaypopup} from './popup.js';
 
 'use strict';
 
@@ -80,6 +81,32 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
         font: "Bradley Hand",
     }, "default");
 
+    /*let systemlist = Object.keys(dice3d.DiceFactory.systems)
+
+    var i;
+    for (i = 0; i < systemlist.length; i++) {
+      dice3d.addDicePreset({
+          type:"dt6",
+          labels:["modules/tension-pool/images/Danger.webp","","","","","",],
+            bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
+          system: systemlist[i],
+        });
+    }
+
+
+    dice3d.addColorset({
+		name:'TPD',
+		description:'Tension Pool Dice',
+		category:'Tension Pool',
+		foreground:'#ffff00',
+		background:'#000000',
+		outline:'black',
+		edge:'#940202',
+		texture:'none',
+        font:"Bradley Hand",
+	},"default");
+
+     */
 });
 
 Hooks.on("ready", () => {
@@ -91,7 +118,16 @@ Hooks.on("ready", () => {
     if(!game.settings.get("core", "noCanvas"))
         game.tension = new Tension();
 
+    if (game.settings.get("tension-pool", "LatestVersion") !== game.modules.get("tension-pool").data.version) {
+        game.settings.set("tension-pool", "DontShowAgain", false)
+        game.settings.set("tension-pool", "LatestVersion", game.modules.get("tension-pool").data.version)
+    };
 
+    if (game.user.isGM) {
+        if (game.settings.get("tension-pool", "DontShowAgain") === false || game.settings.get("tension-pool", "LatestVersion") !== game.modules.get("tension-pool").data.version) {
+            displaypopup()
+        }
+    };
 });
 
 async function updatedisplay(diceinpool){

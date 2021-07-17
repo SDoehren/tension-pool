@@ -122,5 +122,19 @@ export const registerSettings = function () {
         type: Boolean
     });
 
+    game.settings.register("tension-pool", "LatestVersion", {
+        name: "Latest Version",
+        scope: "world",
+        config: false,
+        default: "",
+        type: String
+    });
 
+    game.settings.register("tension-pool", "DontShowAgain", {
+        name: "Dont Show Again",
+        scope: "world",
+        config: false,
+        default: false,
+        type: Boolean
+    });
 };

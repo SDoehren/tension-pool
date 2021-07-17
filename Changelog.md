@@ -6,6 +6,7 @@
 - Option to Trigger a macro when a complication occurs added
 - Minor Visual Improvements
 - Clicking the pool will now add a die
+- Dice So Nice 4 Support
 
 #### 0.0.45 - API added
 

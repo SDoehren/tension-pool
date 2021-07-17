@@ -10,6 +10,8 @@
 
 [![ko-fi](https://img.shields.io/badge/ko--fi-Support%20Me-red?style=flat-square&logo=ko-fi)](https://ko-fi.com/sdoehren)
 [![Patreon](https://img.shields.io/badge/Patreon-Support%20Me-red?style=flat-square&logo=patreon)](https://www.patreon.com/bePatron?u=49614365)
+[![Patreon](https://img.shields.io/badge/Crypto-Support-red?style=flat-square)](https://sdoehren.github.io/support.html)
+
 
 [![The Forge](https://img.shields.io/badge/The%20Forge-Pay%20What%20You%20Want-success?style=flat-square)](https://eu.forge-vtt.com/bazaar#package=tension-pool)
 
@@ -27,6 +29,8 @@ Can be controlled from scene controls or from chat commands
 
 ![Image](images/Guide1.webp)
 
+Or click the pool to add a die.
+
 ## Chat Commands
 
 - /TPadddie - Adds a Die to the Pool
@@ -41,7 +45,7 @@ Can be controlled from scene controls or from chat commands
 
 ## Hook Calls and API
 
-Hook Calls and API are available in a [separate document](api.md)
+Hook Calls and API are available [here](api.md)
 
 
 ## Change log
