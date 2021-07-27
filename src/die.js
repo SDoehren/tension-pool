@@ -4,7 +4,7 @@ export class TensionDie extends Die {
         super(termData);
     }
     /** @override */
-    static DENOMINATION = "t6";
+    static DENOMINATION = "t";
 
     /** @override */
     get total(){

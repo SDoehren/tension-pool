@@ -6,8 +6,6 @@ import {displaypopup} from './popup.js';
 'use strict';
 
 function registerLayer() {
-    console.log(TensionLayer);
-
     const layers = mergeObject(Canvas.layers, {
         TensionLayer: TensionLayer
     });
@@ -47,9 +45,7 @@ function sendmessage(message){
 }
 
 function sendmessageoveride(message){
-
     ChatMessage.create({content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
-
 }
 
 Hooks.once('init', async () => {
@@ -60,9 +56,10 @@ Hooks.once('init', async () => {
 });
 
 Hooks.once('diceSoNiceReady', (dice3d) => {
+    console.log(dice3d);
     dice3d.addSystem({ id: "tension-pool", name: "Tension Pool" }, "default");
     dice3d.addDicePreset({
-        type: "dt6",
+        type: "dt",
         labels: ["modules/tension-pool/images/Danger.webp", "", "", "", "", "",],
         bumpMaps: ["modules/tension-pool/images/Danger_bump.webp", "", "", "", "", "",],
         system: "tension-pool",
@@ -80,33 +77,6 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
         texture: 'none',
         font: "Bradley Hand",
     }, "default");
-
-    /*let systemlist = Object.keys(dice3d.DiceFactory.systems)
-
-    var i;
-    for (i = 0; i < systemlist.length; i++) {
-      dice3d.addDicePreset({
-          type:"dt6",
-          labels:["modules/tension-pool/images/Danger.webp","","","","","",],
-            bumpMaps:["modules/tension-pool/images/Danger_bump.webp","","","","","",],
-          system: systemlist[i],
-        });
-    }
-
-
-    dice3d.addColorset({
-		name:'TPD',
-		description:'Tension Pool Dice',
-		category:'Tension Pool',
-		foreground:'#ffff00',
-		background:'#000000',
-		outline:'black',
-		edge:'#940202',
-		texture:'none',
-        font:"Bradley Hand",
-	},"default");
-
-     */
 });
 
 Hooks.on("ready", () => {
@@ -492,7 +462,7 @@ export class Tension {
      * @returns {Promise<boolean>} where resolves true if a complication was rolled, false if not.
      * @param dice (int) - the number of dice to be rolled
      * @param message (str) - the message to be displayed in the notification/chat message
-     * @param dicesize (str, optional) - sets the size of dice to be used ("dt6" for Tension Dice's ! dice). Default: current dice size in settings
+     * @param dicesize (str, optional) - sets the size of dice to be used ("dt" for Tension Dice's ! dice). Default: current dice size in settings
      */
 
     async rollcustompool(dice,message,dicesize){
