@@ -6,7 +6,7 @@ export function displaypopup() {
         "                    <img src=\"https://img.shields.io/badge/Patreon-Support-red?style=flat-square&amp;logo=patreon\" alt=\"Patreon\"></a>\n" +
         "                <a href=\"https://sdoehren.github.io/support.html\" target=\"_blank\" rel=\"noopener noreferrer\">\n" +
         "                    <img src=\"https://img.shields.io/badge/Crypto-Support-red?style=flat-square\" alt=\"Crpto\"></a>\n"
-    
+
 
     let post = "<h1>Support Tension Pool</h1>\n" + support +
         "<h1 id=\"change-log\">Change Log</h1>\n" +
