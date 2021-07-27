@@ -6,10 +6,14 @@ export function displaypopup() {
         "                    <img src=\"https://img.shields.io/badge/Patreon-Support-red?style=flat-square&amp;logo=patreon\" alt=\"Patreon\"></a>\n" +
         "                <a href=\"https://sdoehren.github.io/support.html\" target=\"_blank\" rel=\"noopener noreferrer\">\n" +
         "                    <img src=\"https://img.shields.io/badge/Crypto-Support-red?style=flat-square\" alt=\"Crpto\"></a>\n"
-
+    
 
     let post = "<h1>Support Tension Pool</h1>\n" + support +
         "<h1 id=\"change-log\">Change Log</h1>\n" +
+        "<h4 id=\"0-0-47\">0.0.47 - Macro Breaking Change</h4>\n" +
+        "<ul>\n" +
+        "<li>Tension die short code had been changed from dt6 to just dt to fix an issue with compatibility with Dice So Nice</li>\n" +
+        "</ul>\n" +
         "<h4 id=\"0-0-46\">0.0.46</h4>\n" +
         "<ul>\n" +
         "<li>d100 option added</li>\n" +
@@ -18,8 +22,7 @@ export function displaypopup() {
         "<li>Clicking the pool will now add a die</li>\n" +
         "<li>Dice So Nice 4 Support</li>\n" +
         "</ul>\n" +
-        "<h4 id=\"0-0-45-api-added\">0.0.45 - API added</h4>\n" +
-        "<h4 id=\"0-0-41-removed-requirement-to-use-tension-die-dice-system-in-dice-so-nice\">0.0.41 - Removed requirement to use Tension Die Dice System in Dice So Nice</h4>"
+        "<h4 id=\"0-0-45-api-added\">0.0.45 - API added</h4>\n"
 
 
     let d = new Dialog({
