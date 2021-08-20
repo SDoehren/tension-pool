@@ -294,15 +294,20 @@ async function rollpool(dice,message,dicesize){
 
         sendmessageoveride(mess)
     }
+
+    Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
+
     if (game.settings.get("tension-pool", 'emptythepool')) {
         game.settings.set("tension-pool", 'diceinpool', 0);
+        Hooks.call("tension-poolChange", 0);
         await updatedisplay(0);
     } else if (dice >= game.settings.get("tension-pool", 'maxdiceinpool')) {
         game.settings.set("tension-pool", 'diceinpool', 0);
+        Hooks.call("tension-poolChange", 0);
         await updatedisplay(0);
     }
 
-    Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
+
     console.log(complication);
     if (complication){
         if (game.settings.get("tension-pool",'MacroName').length !== 0) {
