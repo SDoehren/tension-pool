@@ -25,7 +25,6 @@ function messages(data) {
     if (data.datatype === "updatedisplay") {
         updatedisplay(data.message)
     }
-
 }
 
 function sendmessage(message){
@@ -172,6 +171,11 @@ async function adddie(){
     let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
 
     diceinpool +=1
+    if (diceinpool>maxdiceinpool){
+        diceinpool= maxdiceinpool
+        return;
+    }
+
     await sendmessage("Die Added to Pool ("+diceinpool+"/"+maxdiceinpool+")")
 
     if ((game.settings.get("tension-pool",'dropdie')) && (diceinpool < game.settings.get("tension-pool", 'maxdiceinpool'))){

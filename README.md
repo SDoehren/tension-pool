@@ -52,12 +52,14 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
-#### 0.0.46
+#### 0.0.50
 
-- d100 option added
-- Option to Trigger a macro when a complication occurs added
-- Minor Visual Improvements
-- Clicking the pool will now add a die
+- Protection against overfilling the pool has been added.
+
+#### 0.0.47 - Macro Breaking Change
+
+- Tension die short code had been changed from dt6 to just dt to fix an issue with compatibility with Dice So Nice
+
 
 
 ### Licence

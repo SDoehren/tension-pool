@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0.0.50
+
+- Protection against overfilling the pool has been added.
+
 #### 0.0.47 - Macro Breaking Change
 
 - Tension die short code had been changed from dt6 to just dt to fix an issue with compatibility with Dice So Nice
