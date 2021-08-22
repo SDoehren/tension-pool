@@ -104,6 +104,15 @@ export const registerSettings = function () {
         type: String,
     });
 
+    game.settings.register("tension-pool", "PauseOnComplication", {
+        name: "Pause On Complication",
+        hint:"Pause the game if a Complication is rolled.",
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+    });
+
     game.settings.register("tension-pool", "MacroName", {
         name: "Run Macro when Complication occurs:",
         hint:"Enter name of Macro that should be run, leave blank to not run a macro. Macro name should be unique.",
@@ -118,6 +127,31 @@ export const registerSettings = function () {
         hint:"Replace calulation of the complication with a simple sum of the dice values.",
         scope: "world",
         config: true,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register("tension-pool", "secsautodiceadd", {
+        name: "Number of seconds between auto adding dice",
+        hint:"For Simple Calendar Integration",
+        scope: "world",
+        config: true,
+        default: 600,
+        type: Number
+    });
+
+    game.settings.register("tension-pool", "lastautodiceadd", {
+        name: "last auto dice add",
+        scope: "world",
+        config: false,
+        default: 0,
+        type: Number
+    });
+
+    game.settings.register("tension-pool", "autodiceaddactive", {
+        name: "auto dice add is active",
+        scope: "world",
+        config: false,
         default: false,
         type: Boolean
     });

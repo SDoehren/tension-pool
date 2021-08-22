@@ -166,22 +166,38 @@ async function removedie(){
     Hooks.call("tension-poolChange", diceinpool);
 }
 
-async function adddie(){
+async function adddie(message=undefined,count=1){
+    if (!game.user.isGM) {
+        return;
+    }
+
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
     let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
 
-    diceinpool +=1
+    diceinpool +=count
     if (diceinpool>maxdiceinpool){
         diceinpool= maxdiceinpool
         return;
     }
 
-    await sendmessage("Die Added to Pool ("+diceinpool+"/"+maxdiceinpool+")")
+    if (count===1) {
+        if (message === undefined) {
+            await sendmessage("Die Added to Pool (" + diceinpool + "/" + maxdiceinpool + ")")
+        } else {
+            await sendmessage("Die Added to Pool (" + diceinpool + "/" + maxdiceinpool + ") " + message)
+        }
+    } else {
+        if (message === undefined) {
+            await sendmessage(count + " Dice Added to Pool (" + diceinpool + "/" + maxdiceinpool + ")")
+        } else {
+            await sendmessage(count + " Dice Added to Pool (" + diceinpool + "/" + maxdiceinpool + ") " + message)
+        }
+    }
 
     if ((game.settings.get("tension-pool",'dropdie')) && (diceinpool < game.settings.get("tension-pool", 'maxdiceinpool'))){
 
         let dicesize = game.settings.get("tension-pool",'dicesize');
-        let Ro = new Roll(1+dicesize);
+        let Ro = new Roll(count+dicesize);
         await Ro.evaluate({async:true})
         game.dice3d.showForRoll(Ro, game.user, false, null);
     }
@@ -195,7 +211,9 @@ async function adddie(){
     if (diceinpool>=maxdiceinpool){
         await rollpool(diceinpool,"Dice Pool Rolled and Emptied");
     }
+    return diceinpool;
 }
+
 
 async function emptypool(){
     let maxdiceinpool = game.settings.get("tension-pool",'maxdiceinpool');
@@ -307,12 +325,17 @@ async function rollpool(dice,message,dicesize){
         await updatedisplay(0);
     }
 
-
-    console.log(complication);
     if (complication){
+        if (game.settings.get("tension-pool", "PauseOnComplication")){
+            if (!game.paused) {
+                game.togglePause();
+            }
+        }
+
         if (game.settings.get("tension-pool",'MacroName').length !== 0) {
             runmacro(game.settings.get("tension-pool",'MacroName'))
         }
+
     }
 
     return complication;
@@ -331,6 +354,171 @@ async function runmacro(macroname){
 
     targetmacro[0].execute()
 }
+
+
+async function TensionTimerConfig() {
+
+    if (game.modules.get("foundryvtt-simple-calendar") === undefined) {
+        new Dialog({
+            title: "Tension Timer",
+            content: "Simple Calendar by vigoren is required to use Tension Timers",
+            buttons: {
+                start: {
+                    label: "Get Simple Calendar",
+                    callback: (event) => {
+                        window.open("https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module");
+                    },
+                },
+                close: {
+                    label: "close",
+                    callback: (event) => {
+                        return;
+                    },
+                },
+            }
+        }).render(true)
+        return;
+    } else if (!game.modules.get("foundryvtt-simple-calendar").active) {
+        new Dialog({
+            title: "Tension Timer",
+            content: "Simple Calendar by vigoren is required to use Tension Timers.\nYou have this module installed but it is not active.",
+            buttons: {
+                close: {
+                    label: "Close",
+                    callback: (event) => {
+                        return;
+                    },
+                },
+            }
+        }).render(true)
+        return;
+    } else {
+        let defaultseconds = game.settings.get('tension-pool', 'secsautodiceadd')
+        let autodiceaddactive = game.settings.get('tension-pool', 'autodiceaddactive')
+
+        let startcommand;
+        let cancelcommand;
+        if (autodiceaddactive) {
+            startcommand = "Replace Timer"
+            cancelcommand = "Stop Current Timer"
+        } else {
+            startcommand = "Start Timer"
+            cancelcommand = "Timer Not Active"
+        }
+
+        new Dialog({
+            title: "Tension Timer",
+            content: `<form id="TensionTimerOptions">
+        <div class="form-group">
+          <label>In Game Seconds Between Die Drop</label>
+          <input type="number" name="TensionTimerSeconds" min="1" value="` + defaultseconds + `">
+        </div>
+        </form>`,
+            buttons: {
+                start: {
+                    label: startcommand,
+                    callback: (event) => {
+                        console.log(event);
+                        const secondsbetween = $(event)
+                            .find('input[name="TensionTimerSeconds"]')
+                            .val();
+                        game.settings.set("tension-pool", "secsautodiceadd", secondsbetween)
+                        game.settings.set("tension-pool", "lastautodiceadd", SimpleCalendar.api.timestamp())
+                        game.settings.set("tension-pool", "autodiceaddactive", true)
+
+
+                        let nextdropstamp = parseInt(SimpleCalendar.api.timestamp())+parseInt(secondsbetween);
+                        console.log(nextdropstamp);
+                        console.log(SimpleCalendar.api.timestamp());
+                        let datedisplaydata = SimpleCalendar.api.timestampToDate(nextdropstamp).display;
+                        console.log(SimpleCalendar.api.timestampToDate(nextdropstamp));
+
+                        let realworldgap = Math.ceil(secondsbetween/game.settings.get('foundryvtt-simple-calendar', "time-configuration").gameTimeRatio)
+
+                        let clockstatus;
+                        if (SimpleCalendar.api.clockStatus().started) {
+                            clockstatus = "running"
+                        } else {
+                            clockstatus = "not running"
+                        }
+
+                        let message = "You have set a Tension Timer with an interval of "+secondsbetween+" in game seconds," +
+                            " the die drop will be at "+datedisplaydata.time+" on the "+ datedisplaydata.day+datedisplaydata.daySuffix+" of" +
+                            " "+ datedisplaydata.monthName+" "+datedisplaydata.yearPrefix+ datedisplaydata.year+ datedisplaydata.yearPostfix+". " +
+                            "This will take "+realworldgap + " seconds in the real world (the clock is currently "+clockstatus+")."
+
+                        ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Timer"})}, {});
+                    },
+                },
+                stop: {
+                    label: cancelcommand,
+                    callback: (event) => {
+                        game.settings.set("tension-pool", "autodiceaddactive", false)
+                        ui.notifications.info("Tension Pool | You have stopped the Tension Timer");
+                    },
+                },
+                close: {
+                    label: "Cancel",
+                    callback: (event) => {
+                        return true;
+                    },
+                },
+            },
+            default: "close",
+        }).render(true);
+    }
+}
+
+async function processtimeupdate(){
+    let gameTimeRatio = game.settings.get('foundryvtt-simple-calendar', "time-configuration").gameTimeRatio
+
+    if (game.settings.get("tension-pool", "autodiceaddactive")) {
+        let nextdrop = game.settings.get("tension-pool", "lastautodiceadd") + game.settings.get("tension-pool", "secsautodiceadd")
+        let timetonextdrop = nextdrop - SimpleCalendar.api.timestamp()
+        let realtimetonextdrop = Math.ceil(timetonextdrop / gameTimeRatio)
+        if (timetonextdrop <= 0) {
+            game.settings.set("tension-pool", "lastautodiceadd", SimpleCalendar.api.timestamp())
+            let rollsdue = Math.ceil(-timetonextdrop/game.settings.get("tension-pool", "secsautodiceadd"))+1;
+            let spacesinpool = game.settings.get("tension-pool", "maxdiceinpool")-game.settings.get("tension-pool", "diceinpool");
+
+            if (rollsdue>spacesinpool){
+                rollsdue=spacesinpool
+            }
+
+            if (rollsdue>0) {
+                await adddie("- Auto Added", rollsdue)
+            }
+
+
+            let realworldgap = Math.ceil(game.settings.get("tension-pool", "secsautodiceadd") / gameTimeRatio)
+            let clockstatus;
+            if (SimpleCalendar.api.clockStatus().started) {
+                clockstatus = "running"
+            } else {
+                clockstatus = "not running"
+            }
+
+            let message = "The next die drop will take " + realworldgap + " seconds in the real world (the clock is currently " + clockstatus + ")."
+            ChatMessage.create({
+                whisper: ChatMessage.getWhisperRecipients("GM"),
+                content: message,
+                speaker: ChatMessage.getSpeaker({alias: "Tension Timer"})
+            }, {});
+
+        } else if (realtimetonextdrop === 10)
+            ChatMessage.create({
+                whisper: ChatMessage.getWhisperRecipients("GM"),
+                content: "Next die drop in " + realtimetonextdrop + " real world seconds.",
+                speaker: ChatMessage.getSpeaker({alias: "Tension Timer"})
+            }, {});
+    }
+}
+
+Hooks.on('updateWorldTime', async (timestamp,stepsize) => {
+    await processtimeupdate()
+});
+
+
 
 
 Hooks.on("getSceneControlButtons", (controls) => {
@@ -379,6 +567,14 @@ Hooks.on("getSceneControlButtons", (controls) => {
                     title: "Roll Full Dice Pool",
                     icon: "fas fa-dice",
                     onClick: () => rollpool(game.settings.get("tension-pool", 'maxdiceinpool'), "Dice Pool Filled, Rolled and Emptied"),
+                    visible: game.user.isGM,
+                    button: true
+                },
+                {
+                    name: "tension-pool-autoadd",
+                    title: "Simple Calendar based dice additions",
+                    icon: "fas fa-clock",
+                    onClick: () => TensionTimerConfig(),
                     visible: game.user.isGM,
                     button: true
                 },
@@ -446,8 +642,8 @@ Hooks.on("chatCommandsReady", function(chatCommands) {
 
 export class Tension {
 
-    async adddie(){
-        await adddie()
+    async adddie(message=undefined){
+        await adddie(message=message)
     }
 
     async removedie(){
@@ -478,13 +674,4 @@ export class Tension {
         await rollpool(dice,message,dicesize)
     }
 }
-/*Hooks.on("renderSidebarTab", async(object, html) => {
-  if (object instanceof Settings) {
-    const details = html.find("#game-details");
-    const TensionDetails = document.createElement("li");
-    TensionDetails.classList.add("donation-link");
-    TensionDetails.innerHTML = "Tension Pool <a title='Donate' href='https://ko-fi.com/sdoehren'><img src='https://storage.ko-fi.com/cdn/cup-border.png'></a> <span><a href='https://github.com/SDoehren/tension-pool/issues'>Report issue</a></span>";
-    details.append(TensionDetails);
-  }
-})*/
 
