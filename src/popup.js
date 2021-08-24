@@ -3,9 +3,7 @@ export function displaypopup() {
     let support = "<a href=\"https://ko-fi.com/sdoehren\" target=\"_blank\" rel=\"noopener noreferrer\">\n" +
         "                    <img src=\"https://img.shields.io/badge/ko--fi-Support-red?style=flat-square&amp;logo=ko-fi\" alt=\"ko-fi\"></a>\n" +
         "                <a href=\"https://www.patreon.com/sdoehren?utm_source=Tension+Pool&utm_medium=Referral&utm_campaign=Module+Popup\" target=\"_blank\" rel=\"noopener noreferrer\">\n" +
-        "                    <img src=\"https://img.shields.io/badge/Patreon-Support-red?style=flat-square&amp;logo=patreon\" alt=\"Patreon\"></a>\n" +
-        "                <a href=\"https://sdoehren.github.io/support.html\" target=\"_blank\" rel=\"noopener noreferrer\">\n" +
-        "                    <img src=\"https://img.shields.io/badge/Crypto-Support-red?style=flat-square\" alt=\"Crpto\"></a>\n"
+        "                    <img src=\"https://img.shields.io/badge/Patreon-Support-red?style=flat-square&amp;logo=patreon\" alt=\"Patreon\"></a>\n"
 
 
     let post = "<h1>Tension Pool</h1>\n" + support +
@@ -35,11 +33,6 @@ export function displaypopup() {
             one: {
                 icon: '<i class="fas fa-check"></i>',
                 label: "Close",
-                callback: () => console.log("Closed")
-            },
-            two: {
-                icon: '<i class="fas fa-times"></i>',
-                label: "Close until next update",
                 callback: () => game.settings.set("tension-pool", "DontShowAgain", true)
             },
             three: {

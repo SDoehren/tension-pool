@@ -92,11 +92,6 @@ Hooks.on("ready", () => {
         game.settings.set("tension-pool", "LatestVersion", game.modules.get("tension-pool").data.version)
     };
 
-    if (game.user.isGM) {
-        if (game.settings.get("tension-pool", "DontShowAgain") === false || game.settings.get("tension-pool", "LatestVersion") !== game.modules.get("tension-pool").data.version) {
-            displaypopup()
-        }
-    };
 });
 
 async function updatedisplay(diceinpool){
@@ -176,7 +171,6 @@ async function adddie(message=undefined,count=1){
 
     diceinpool +=count
     if (diceinpool>maxdiceinpool){
-        diceinpool= maxdiceinpool
         return;
     }
 
@@ -411,7 +405,7 @@ async function TensionTimerConfig() {
             content: `<form id="TensionTimerOptions">
         <div class="form-group">
           <label>In Game Seconds Between Die Drop</label>
-          <input type="number" name="TensionTimerSeconds" min="1" value="` + defaultseconds + `">
+          <input type="number" name="TensionTimerSeconds" id="TensionTimerSeconds" min="1" value="` + defaultseconds + `">
         </div>
         </form>`,
             buttons: {
@@ -419,6 +413,9 @@ async function TensionTimerConfig() {
                     label: startcommand,
                     callback: (event) => {
                         console.log(event);
+                        var parser = new DOMParser();
+                        var htmlDoc = parser.parseFromString(event[0].innerHTML, 'text/html');
+                        console.log(htmlDoc.getElementById('TensionTimerSeconds'));
                         const secondsbetween = $(event)
                             .find('input[name="TensionTimerSeconds"]')
                             .val();
@@ -491,14 +488,8 @@ async function processtimeupdate(){
 
 
             let realworldgap = Math.ceil(game.settings.get("tension-pool", "secsautodiceadd") / gameTimeRatio)
-            let clockstatus;
-            if (SimpleCalendar.api.clockStatus().started) {
-                clockstatus = "running"
-            } else {
-                clockstatus = "not running"
-            }
 
-            let message = "The next die drop will take " + realworldgap + " seconds in the real world (the clock is currently " + clockstatus + ")."
+            let message = "The next die drop will take " + realworldgap + " seconds in the real world."
             ChatMessage.create({
                 whisper: ChatMessage.getWhisperRecipients("GM"),
                 content: message,
