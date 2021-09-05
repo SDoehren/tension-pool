@@ -79,18 +79,16 @@ Hooks.once('diceSoNiceReady', (dice3d) => {
 });
 
 Hooks.on("ready", () => {
-    console.log('tension-pool | Ready');
 
     console.log("tension-pool | Listener")
     game.socket.on('module.tension-pool', (data) => messages(data));
 
-    if(!game.settings.get("core", "noCanvas"))
+    if(!game.settings.get("core", "noCanvas")) {
         game.tension = new Tension();
+    }
 
-    if (game.settings.get("tension-pool", "LatestVersion") !== game.modules.get("tension-pool").data.version) {
-        game.settings.set("tension-pool", "DontShowAgain", false)
-        game.settings.set("tension-pool", "LatestVersion", game.modules.get("tension-pool").data.version)
-    };
+    console.log('tension-pool | Ready');
+
 
 });
 
@@ -389,6 +387,12 @@ async function TensionTimerConfig() {
     } else {
         let defaultseconds = game.settings.get('tension-pool', 'secsautodiceadd')
         let autodiceaddactive = game.settings.get('tension-pool', 'autodiceaddactive')
+        let PauseOnComplicationval = game.settings.get('tension-pool', 'PauseOnComplication')
+        if (PauseOnComplicationval){
+            PauseOnComplicationval = "checked";
+        } else {
+            PauseOnComplicationval = "";
+        }
 
         let startcommand;
         let cancelcommand;
@@ -407,6 +411,10 @@ async function TensionTimerConfig() {
           <label>In Game Seconds Between Die Drop</label>
           <input type="number" name="TensionTimerSeconds" id="TensionTimerSeconds" min="1" value="` + defaultseconds + `">
         </div>
+        <div class="form-group">
+          <label>Pause On Complication</label>
+          <input type="checkbox" name="PauseOnComplication" id="PauseOnComplication" `+PauseOnComplicationval+`>
+        </div>
         </form>`,
             buttons: {
                 start: {
@@ -415,20 +423,24 @@ async function TensionTimerConfig() {
                         console.log(event);
                         var parser = new DOMParser();
                         var htmlDoc = parser.parseFromString(event[0].innerHTML, 'text/html');
-                        console.log(htmlDoc.getElementById('TensionTimerSeconds'));
+
                         const secondsbetween = $(event)
                             .find('input[name="TensionTimerSeconds"]')
                             .val();
+                        const PauseOnComplicationChecked = $(event)
+                            .find('input[name="PauseOnComplication"]')
+                            .prop("checked");
+
                         game.settings.set("tension-pool", "secsautodiceadd", secondsbetween)
                         game.settings.set("tension-pool", "lastautodiceadd", SimpleCalendar.api.timestamp())
                         game.settings.set("tension-pool", "autodiceaddactive", true)
+                        game.settings.set("tension-pool", "PauseOnComplication", PauseOnComplicationChecked)
 
+                        console.log(secondsbetween);
+                        console.log(PauseOnComplicationChecked);
 
                         let nextdropstamp = parseInt(SimpleCalendar.api.timestamp())+parseInt(secondsbetween);
-                        console.log(nextdropstamp);
-                        console.log(SimpleCalendar.api.timestamp());
                         let datedisplaydata = SimpleCalendar.api.timestampToDate(nextdropstamp).display;
-                        console.log(SimpleCalendar.api.timestampToDate(nextdropstamp));
 
                         let realworldgap = Math.ceil(secondsbetween/game.settings.get('foundryvtt-simple-calendar', "time-configuration").gameTimeRatio)
 
@@ -508,8 +520,6 @@ async function processtimeupdate(){
 Hooks.on('updateWorldTime', async (timestamp,stepsize) => {
     await processtimeupdate()
 });
-
-
 
 
 Hooks.on("getSceneControlButtons", (controls) => {

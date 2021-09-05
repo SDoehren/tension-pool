@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0051 - minor bug fix
+
+- removed the ability of players to trigger adddie event
+
 #### 0.0.50
 
 - Protection against overfilling the pool has been added.
