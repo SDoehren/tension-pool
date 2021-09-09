@@ -224,6 +224,15 @@ async function rollpool(dice,message,dicesize){
         return;
     }
 
+    let gamepausedalready;
+    if (game.settings.get("tension-pool",'PauseDuringRoll') && !(game.paused)){
+        game.togglePause();
+        gamepausedalready = false;
+    } else {
+        gamepausedalready = true;
+    }
+
+
     await updatedisplay(dice);
     if (dice!==game.settings.get("tension-pool",'diceinpool')){
         Hooks.call("tension-poolChange", dice);
@@ -317,17 +326,24 @@ async function rollpool(dice,message,dicesize){
         await updatedisplay(0);
     }
 
+    let pausedduetocomplication = false;
     if (complication){
         if (game.settings.get("tension-pool", "PauseOnComplication")){
             if (!game.paused) {
                 game.togglePause();
             }
+            pausedduetocomplication = true;
         }
 
         if (game.settings.get("tension-pool",'MacroName').length !== 0) {
             runmacro(game.settings.get("tension-pool",'MacroName'))
         }
 
+    }
+
+    console.log(game.settings.get("tension-pool",'PauseDuringRoll'),game.paused,!gamepausedalready,pausedduetocomplication)
+    if (game.settings.get("tension-pool",'PauseDuringRoll') && (game.paused) && !(gamepausedalready) && !(pausedduetocomplication)){
+        game.togglePause();
     }
 
     return complication;

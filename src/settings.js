@@ -104,6 +104,15 @@ export const registerSettings = function () {
         type: String,
     });
 
+    game.settings.register("tension-pool", "PauseDuringRoll", {
+        name: "Pause During Pool Roll",
+        hint:"Pause the game while the pool is being rolled.",
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+    });
+
     game.settings.register("tension-pool", "PauseOnComplication", {
         name: "Pause On Complication",
         hint:"Pause the game if a Complication is rolled.",

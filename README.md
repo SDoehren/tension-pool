@@ -25,11 +25,20 @@ Alternatively install via the manifest url: https://github.com/SDoehren/tension-
 
 ## Instructions
 
-Can be controlled from scene controls or from chat commands
+Can be controlled from scene controls
 
 ![Image](images/Guide1.webp)
 
-Or click the pool to add a die.
+Or click the pool to add a die
+
+![Image](images/Guide2.webp)
+
+Or from [chat commands](https://github.com/SDoehren/tension-pool#chat-commands)
+
+### Tension Timer
+
+Tension Timer requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module); Simple Calendar is not a dependency so needs to be installed and activated separately.  
+
 
 ## Chat Commands
 
@@ -41,7 +50,7 @@ Or click the pool to add a die.
 
 ## Planned updates
 
-- Add controls to the pool below the chat
+
 
 ## Hook Calls and API
 
@@ -76,14 +85,18 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
+#### 0052
+
+- Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))
+- Option to pause the game while the pool is being rolled added. 
+
+#### 0051 - minor bug fix
+
+- removed the ability of players to trigger adddie event
+
 #### 0.0.50
 
 - Protection against overfilling the pool has been added.
-
-#### 0.0.47 - Macro Breaking Change
-
-- Tension die short code had been changed from dt6 to just dt to fix an issue with compatibility with Dice So Nice
-
 
 
 ### Licence
