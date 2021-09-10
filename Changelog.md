@@ -1,6 +1,6 @@
 # Change Log
 
-#### 0052
+#### 0052 - Tension Timer
 
 - Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))
 - Option to pause the game while the pool is being rolled added. 

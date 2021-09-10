@@ -25,19 +25,31 @@ Alternatively install via the manifest url: https://github.com/SDoehren/tension-
 
 ## Instructions
 
-Can be controlled from scene controls
+Tension Pool can be controlled from scene controls
 
 ![Image](images/Guide1.webp)
 
-Or click the pool to add a die
+Alternatively, click the pool to add a die
 
 ![Image](images/Guide2.webp)
 
-Or from [chat commands](https://github.com/SDoehren/tension-pool#chat-commands)
+Or use [chat commands](https://github.com/SDoehren/tension-pool#chat-commands)
 
 ### Tension Timer
 
 Tension Timer requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module); Simple Calendar is not a dependency so needs to be installed and activated separately.  
+Setting a Tension Timer will lead to a die being dropped in regular intervals based on the in game clock.
+
+To set a timer open the timer configure using the scene controls.  
+Pick the interval you wish to use in _in game_ seconds (default: 600).  
+Hit start timer and the Tension Timer will automatically drop dice as appropriate.
+The simple calendar must be running for dice to drop.
+
+![Image](images/tensiontimer1.webp)
+
+To replace or stop a timer, open the timer configure using the scene controls and choose the appropriate option.
+
+![Image](images/tensiontimer2.webp)
 
 
 ## Chat Commands
@@ -45,10 +57,8 @@ Tension Timer requires [Simple Calendar by vigoren](https://github.com/vigoren/f
 - /TPadddie - Adds a Die to the Pool
 - /TPremovedie - Remove Die from Pool
 - /TPemptypool - Empty the Pool (no roll)
-- /TProllpool - Roll Dice Pool
-- /TProllfullpool - Roll Dice Pool
-
-## Planned updates
+- /TProllpool - Roll the Dice Pool
+- /TProllfullpool - Fill and Roll the Dice Pool
 
 
 
@@ -85,7 +95,7 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
-#### 0052
+#### 0052 - Tension Timer
 
 - Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))
 - Option to pause the game while the pool is being rolled added. 
