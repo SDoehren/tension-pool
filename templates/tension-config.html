@@ -1,0 +1,125 @@
+<form autocomplete="off">
+	<!-- BACKGROUND AND APPEARANCE -->
+	<h3 class="form-header"><i class="far fa-image"></i> Core Settings</h3>
+	<p class="notes">The Base Functionality of Tension Pool</p>
+
+    <div class="form-group">
+		<label>Max Dice in Pool</label>
+		<input type="number" name="maxdiceinpool" min="1" value="{{maxdiceinpool}}" />
+        <p class="notes">Max Dice in Pool</p>
+    </div>
+
+    <div class="form-group">
+		<label>Dice Size</label>
+        <select name="dicesize">
+            {{selectOptions dicesizechoices selected=dicesize}}
+        </select>
+        <p class="notes">d6 (!) will lock dice so nice to the uses of the tension pool dice set. Fate Die will always output the sum.</p>
+	</div>
+
+    <h3 class="form-header"><i class="far fa-image"></i> Complication Settings</h3>
+	<p class="notes">Tension Pool behaviour when rolling for a Complication</p>
+
+    <div class="form-group">
+		<label>Empty the pool on non-full roll?</label>
+		<input type="checkbox" name="emptythepool" {{checked emptythepool}} />
+        <p class="notes">Should the pool be emptied if it is rolled before Max Dice in Pool is reached.</p>
+    </div>
+
+    <div class="form-group">
+		<label>Whisper roll result to DM?</label>
+		<input type="checkbox" name="WhisperResult" {{checked WhisperResult}} />
+    </div>
+
+    <div class="form-group">
+		<label>Message when no complication occurs:</label>
+		<input type="text" name="SafeMessage" value="{{SafeMessage}}" />
+    </div>
+
+    <div class="form-group">
+		<label>Message when a complication does occurs:</label>
+		<input type="text" name="DangerMessage" value="{{DangerMessage}}" />
+    </div>
+
+    <div class="form-group">
+		<label>Output sum?</label>
+		<input type="checkbox" name="outputsum" {{checked outputsum}} />
+        <p class="notes">Replaces calculation of the complication with a simple sum of the dice values.</p>
+    </div>
+
+    <div class="form-group">
+		<label>Pause During Pool Roll</label>
+		<input type="checkbox" name="PauseDuringRoll" {{checked PauseDuringRoll}} />
+        <p class="notes">Pause the game while the pool is being rolled.</p>
+    </div>
+
+    <div class="form-group">
+		<label>Pause On Complication</label>
+		<input type="checkbox" name="PauseOnComplication" {{checked PauseOnComplication}} />
+        <p class="notes">Pause the game if a Complication is rolled.</p>
+    </div>
+
+    <div class="form-group">
+		<label>Macro On Complication</label>
+		<input type="checkbox" name="MacroOnComplication" {{checked MacroOnComplication}} />
+        <p class="notes">Trigger the below macro if a Complication is rolled.</p>
+    </div>
+
+    <div class="form-group">
+		<label>Run Macro when Complication occurs:</label>
+        <select name="MacroName">
+            {{selectOptions MacroOptions selected=MacroName nameAttr="key" labelAttr="label"}}
+        </select>
+        <p class="notes">Select name of the Macro that should be run. Macro name needs to be unique.</p>
+	</div>
+
+    <h3 class="form-header"><i class="far fa-image"></i> Visual Settings</h3>
+
+    <div class="form-group">
+		<label>Drop a die on add?</label>
+		<input type="checkbox" name="dropdie" {{checked dropdie}} />
+        <p class="notes">Roll a die to demonstrate it being added to the pool (Result is ignored).</p>
+    </div>
+
+    <div class="form-group">
+		<label>Where to announce updates:</label>
+        <select name="outputto">
+            {{selectOptions outputtochoices selected=outputto}}
+        </select>
+        <p class="notes">Pool Rolls outcomes are always output to chat.</p>
+	</div>
+
+    <h3 class="form-header"><i class="far fa-image"></i> Scene Control Settings</h3>
+    <p class="notes">Changing any of the following will trigger a reset on save.</p>
+
+    <div class="form-group">
+		<label>Enable Scene Controls?</label>
+		<input type="checkbox" name="scenecontrols" {{checked scenecontrols}} />
+    </div>
+
+    <label>Individual Scene Controls</label>
+    <div class="form-group">
+		<label>Remove Die From Pool</label><input type='checkbox' name='scenecontrolRemove' {{checked scenecontrolRemove}} />
+        <label>Add Die to Pool</label><input type='checkbox' name='scenecontrolADD' {{checked scenecontrolADD}} />
+    </div>
+    <div class="form-group">
+        <label>Add Die and Roll Pool</label><input type='checkbox' name='scenecontrolADDROLL' {{checked scenecontrolADDROLL}} />
+        <label>Empty the Pool</label><input type='checkbox' name='scenecontrolEMPTY' {{checked scenecontrolEMPTY}} />
+    </div>
+    <div class="form-group">
+        <label>Roll Dice Pool</label><input type='checkbox' name='scenecontrolROLL' {{checked scenecontrolROLL}} />
+        <label>Roll Full Dice Pool</label><input type='checkbox' name='scenecontrolROLLFULL' {{checked scenecontrolROLLFULL}} />
+    </div>
+    <div class="form-group">
+        <label>Tension Timer</label><input type='checkbox' name='scenecontrolAUTO' {{checked scenecontrolAUTO}} />
+    </div>
+
+    <h3 class="form-header"><i class="far fa-image"></i> Other</h3>
+    <div class="form-group">
+        <label>Turn on Debug</label><input type='checkbox' name='Debug' {{checked Debug}} />
+        <p class="notes">You probably don't want this on.</p>
+    </div>
+
+
+	<button type="submit" name="submit" value="1"><i class="far fa-save"></i> Save </button>
+</form>

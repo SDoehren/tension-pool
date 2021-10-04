@@ -1,5 +1,11 @@
 # Change Log
 
+#### 0053
+
+- Scene Control Buttons individually removable
+- Add die and roll pool button added
+- Option to Whisper result to DM added
+
 #### 0052 - Tension Timer
 
 - Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))

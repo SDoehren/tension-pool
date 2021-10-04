@@ -9,21 +9,10 @@ export const registerSettings = function () {
         type: Number
     });
 
-    game.settings.register("tension-pool", "scenecontrols", {
-        name: "Enable Scene Controls?",
-        scope: "world",
-        config: true,
-        default: true,
-        type: Boolean,
-        onChange: () => {
-            location.reload();
-        }
-    });
-
     game.settings.register("tension-pool", "maxdiceinpool", {
         name: "Max Dice in Pool",
         scope: "world",
-        config: true,
+        config: false,
         default: 6,
         type: Number
     });
@@ -32,7 +21,7 @@ export const registerSettings = function () {
         name: "Empty the pool on non-full roll?",
         hint:"Should the pool be emptied if it is rolled before Max Dice in Pool is reached.",
         scope: "world",
-        config: true,
+        config: false,
         default: false,
         type: Boolean
     });
@@ -41,7 +30,7 @@ export const registerSettings = function () {
         name: "Drop a die on add?",
         hint:"Roll a die to demostrate it being added to the pool. (Result is ignored)",
         scope: "world",
-        config: true,
+        config: false,
         default: true,
         type: Boolean
     });
@@ -51,7 +40,7 @@ export const registerSettings = function () {
         name: "Dice Size:",
         hint:"d6 (!) will lock dice so nice to the uses of the tension pool dice set. Fate Die will always output the sum.",
         scope: "world",
-        config: true,
+        config: false,
         default: "dt",
         type: String,
         choices: {
@@ -65,9 +54,6 @@ export const registerSettings = function () {
             d100: "d100",
             df: "Fate",
         },
-        onChange: () => {
-            location.reload();
-        }
     });
 
 
@@ -76,12 +62,12 @@ export const registerSettings = function () {
         name: "Where to announce updates:",
         hint:"Pool Rolls outcomes are always output to chat.",
         scope: "world",
-        config: true,
-        default: "notfications",
+        config: false,
+        default: "notifications",
         type: String,
         choices: {
             both: "both",
-            notfications: "notfications",
+            notifications: "notifications",
             chatlog: "chatlog",
         },
     });
@@ -91,7 +77,7 @@ export const registerSettings = function () {
     game.settings.register("tension-pool", "SafeMessage", {
         name: "Message when no complication occurs:",
         scope: "world",
-        config: true,
+        config: false,
         default: "You are safe for now.",
         type: String,
     });
@@ -99,7 +85,7 @@ export const registerSettings = function () {
     game.settings.register("tension-pool", "DangerMessage", {
         name: "Message when a complication does occurs:",
         scope: "world",
-        config: true,
+        config: false,
         default: "<strong style='color:red'>Complication!</strong>",
         type: String,
     });
@@ -108,7 +94,7 @@ export const registerSettings = function () {
         name: "Pause During Pool Roll",
         hint:"Pause the game while the pool is being rolled.",
         scope: "world",
-        config: true,
+        config: false,
         default: true,
         type: Boolean,
     });
@@ -117,8 +103,17 @@ export const registerSettings = function () {
         name: "Pause On Complication",
         hint:"Pause the game if a Complication is rolled.",
         scope: "world",
-        config: true,
+        config: false,
         default: true,
+        type: Boolean,
+    });
+
+    game.settings.register("tension-pool", "MacroOnComplication", {
+        name: "Run Macro when Complication occurs:",
+        hint:"Enter name of Macro that should be run, leave blank to not run a macro. Macro name should be unique.",
+        scope: "world",
+        config: false,
+        default: false,
         type: Boolean,
     });
 
@@ -126,7 +121,7 @@ export const registerSettings = function () {
         name: "Run Macro when Complication occurs:",
         hint:"Enter name of Macro that should be run, leave blank to not run a macro. Macro name should be unique.",
         scope: "world",
-        config: true,
+        config: false,
         default: "",
         type: String,
     });
@@ -135,7 +130,7 @@ export const registerSettings = function () {
         name: "Output sum?",
         hint:"Replace calulation of the complication with a simple sum of the dice values.",
         scope: "world",
-        config: true,
+        config: false,
         default: false,
         type: Boolean
     });
@@ -144,7 +139,7 @@ export const registerSettings = function () {
         name: "Number of seconds between auto adding dice",
         hint:"For Simple Calendar Integration",
         scope: "world",
-        config: true,
+        config: false,
         default: 600,
         type: Number
     });
@@ -180,4 +175,59 @@ export const registerSettings = function () {
         default: false,
         type: Boolean
     });
+
+    game.settings.register("tension-pool", "scenecontrols", {
+        name: "Enable Scene Controls?",
+        hint:"If off, other Scene Controls settings will be overridden",
+        scope: "world",
+        config: false,
+        default: true,
+        type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolRemove", {
+        name: "Scene Controls - Remove Die From Pool",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolADD", {
+        name: "Scene Controls - Add Die to Pool",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolADDROLL", {
+        name: "Scene Controls - Add Die and Roll Pool",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolEMPTY", {
+        name: "Scene Controls - Empty the Pool",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolROLL", {
+        name: "Scene Controls - Roll Dice Pool",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolROLLFULL", {
+        name: "Scene Controls - Roll Full Dice Pool",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "scenecontrolAUTO", {
+        name: "Scene Controls - Tension Timer",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "WhisperResult", {
+        name: "Whisper roll result to DM",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
+    game.settings.register("tension-pool", "Debug", {
+        name: "Turn on Debug",
+        scope: "world", config: false, default: false, type: Boolean
+    });
+
 };

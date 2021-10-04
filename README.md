@@ -95,6 +95,12 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
+#### 0053
+
+- Scene Control Buttons individually removable
+- Add die and roll pool button added
+- Option to Whisper result to DM added
+
 #### 0052 - Tension Timer
 
 - Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))
@@ -104,9 +110,6 @@ Hook Calls and API are available [here](api.md)
 
 - removed the ability of players to trigger adddie event
 
-#### 0.0.50
-
-- Protection against overfilling the pool has been added.
 
 
 ### Licence
