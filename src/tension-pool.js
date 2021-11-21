@@ -65,6 +65,7 @@ function sendresult(message){
 Hooks.once('init', async () => {
     console.log('tension-pool | Initializing tension-pool');
 
+
     game.settings.registerMenu("tension-pool", "tension-pool", {
         name: "Tension Pool settings",
         label: "Tension Pool settings",
@@ -72,7 +73,7 @@ Hooks.once('init', async () => {
         classes: ['sheet'],
         icon: "fas fa-dice-d20",
         type: TensionConfig,
-        restricted: false
+        restricted: true
     });
 
 
@@ -120,7 +121,7 @@ Hooks.on("ready", () => {
             "<br>If you previously set a Macro to run on complication this setting will need reseting.<br>" +
             "<br>This message will not be shown again.<br><br>" +
             "All the best,<br>SDoehren<br>Discord Server: https://discord.gg/QNQZwGGxuN"
-        ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
+        /*ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});*/
         game.settings.set("tension-pool", "LatestVersion",game.modules.get("tension-pool").data.version)
     }
 
@@ -555,44 +556,47 @@ async function TensionTimerConfig() {
 async function processtimeupdate(){
     let gameTimeRatio = game.settings.get('foundryvtt-simple-calendar', "time-configuration").gameTimeRatio
 
-    if (game.settings.get("tension-pool", "autodiceaddactive")) {
+    if (game.settings.get("tension-pool", "autodiceaddactive")  && game.user.isGM) {
         let nextdrop = game.settings.get("tension-pool", "lastautodiceadd") + game.settings.get("tension-pool", "secsautodiceadd")
         let timetonextdrop = nextdrop - SimpleCalendar.api.timestamp()
         let realtimetonextdrop = Math.ceil(timetonextdrop / gameTimeRatio)
-        if (timetonextdrop <= 0) {
-            game.settings.set("tension-pool", "lastautodiceadd", SimpleCalendar.api.timestamp())
-            let rollsdue = Math.ceil(-timetonextdrop/game.settings.get("tension-pool", "secsautodiceadd"))+1;
-            let spacesinpool = game.settings.get("tension-pool", "maxdiceinpool")-game.settings.get("tension-pool", "diceinpool");
+            if (timetonextdrop <= 0) {
+                game.settings.set("tension-pool", "lastautodiceadd", SimpleCalendar.api.timestamp())
+                let rollsdue = Math.ceil(-timetonextdrop/game.settings.get("tension-pool", "secsautodiceadd"))+1;
+                let spacesinpool = game.settings.get("tension-pool", "maxdiceinpool")-game.settings.get("tension-pool", "diceinpool");
 
-            if (rollsdue>spacesinpool){
-                rollsdue=spacesinpool
+                if (rollsdue>spacesinpool){
+                    rollsdue=spacesinpool
+                }
+
+                if (rollsdue>0) {
+                    await adddie("- Auto Added", rollsdue)
+                }
+
+
+                let realworldgap = Math.ceil(game.settings.get("tension-pool", "secsautodiceadd") / gameTimeRatio)
+
+                let message = "The next die drop will take " + realworldgap + " seconds in the real world."
+                ChatMessage.create({
+                    whisper: ChatMessage.getWhisperRecipients("GM"),
+                    content: message,
+                    speaker: ChatMessage.getSpeaker({alias: "Tension Timer"})
+                }, {});
+
+            } else if (realtimetonextdrop === 10) {
+                ChatMessage.create({
+                    whisper: ChatMessage.getWhisperRecipients("GM"),
+                    content: "Next die drop in " + realtimetonextdrop + " real world seconds.",
+                    speaker: ChatMessage.getSpeaker({alias: "Tension Timer"})
+                }, {});
             }
-
-            if (rollsdue>0) {
-                await adddie("- Auto Added", rollsdue)
-            }
-
-
-            let realworldgap = Math.ceil(game.settings.get("tension-pool", "secsautodiceadd") / gameTimeRatio)
-
-            let message = "The next die drop will take " + realworldgap + " seconds in the real world."
-            ChatMessage.create({
-                whisper: ChatMessage.getWhisperRecipients("GM"),
-                content: message,
-                speaker: ChatMessage.getSpeaker({alias: "Tension Timer"})
-            }, {});
-
-        } else if (realtimetonextdrop === 10)
-            ChatMessage.create({
-                whisper: ChatMessage.getWhisperRecipients("GM"),
-                content: "Next die drop in " + realtimetonextdrop + " real world seconds.",
-                speaker: ChatMessage.getSpeaker({alias: "Tension Timer"})
-            }, {});
     }
 }
 
 Hooks.on('updateWorldTime', async (timestamp,stepsize) => {
-    await processtimeupdate()
+    if (stepsize > 0) {
+        await processtimeupdate()
+    }
 });
 
 

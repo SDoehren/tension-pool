@@ -1,5 +1,16 @@
 # Change Log
 
+#### 0055
+
+- Fixed issue with settings menu being visible to players
+- Fixed issue with Tension Timer sometimes double rolling
+
+#### 0054
+
+- Implemented bug fix causing errors when switching to scene with notes
+- Implemented a number of changes from [thalissa's fork](https://github.com/thalissa/tension-pool)
+
+
 #### 0053
 
 - Scene Control Buttons individually removable

@@ -11,5 +11,5 @@ export class TensionLayer extends PlaceablesLayer {
     });
   }
 
-  static documentName = "Note";
+  static documentName = "Tile";
 }

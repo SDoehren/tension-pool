@@ -95,20 +95,24 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
+#### 0055
+
+- Fixed issue with settings menu being visible to players
+- Fixed issue with Tension Timer sometimes double rolling
+
+#### 0054
+
+- Implemented bug fix causing errors when switching to scene with notes
+- Implemented a number of changes from [thalissa's fork](https://github.com/thalissa/tension-pool)
+
+
 #### 0053
 
 - Scene Control Buttons individually removable
 - Add die and roll pool button added
 - Option to Whisper result to DM added
 
-#### 0052 - Tension Timer
 
-- Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))
-- Option to pause the game while the pool is being rolled added. 
-
-#### 0051 - minor bug fix
-
-- removed the ability of players to trigger adddie event
 
 
 
