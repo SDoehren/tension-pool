@@ -1,6 +1,6 @@
 # Change Log
 
-#### 0056 -VS Compatibility Release
+#### 0056 -V9 Compatibility Release
 
 - Issue with chat pop out resolved
 

@@ -95,6 +95,10 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
+#### 0056 -V9 Compatibility Release
+
+- Issue with chat pop out resolved
+
 #### 0055
 
 - Fixed issue with settings menu being visible to players
@@ -104,13 +108,6 @@ Hook Calls and API are available [here](api.md)
 
 - Implemented bug fix causing errors when switching to scene with notes
 - Implemented a number of changes from [thalissa's fork](https://github.com/thalissa/tension-pool)
-
-
-#### 0053
-
-- Scene Control Buttons individually removable
-- Add die and roll pool button added
-- Option to Whisper result to DM added
 
 
 
