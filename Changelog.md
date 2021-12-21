@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0056 -VS Compatibility Release
+
+- Issue with chat pop out resolved
+
 #### 0055
 
 - Fixed issue with settings menu being visible to players

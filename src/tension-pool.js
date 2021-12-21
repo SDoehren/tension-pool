@@ -7,15 +7,23 @@ import {displaypopup} from './popup.js';
 'use strict';
 
 function registerLayer() {
-    const layers = mergeObject(Canvas.layers, {
-        TensionLayer: TensionLayer
-    });
-    Object.defineProperty(Canvas, 'layers', {
-        get: function () {
-            return layers
-        }
-    });
+    const layers = {
+            TensionLayer: {
+                layerClass: TensionLayer,
+                group: "effects"
+            }
+    }
 
+    CONFIG.Canvas.layers = mergeObject(Canvas.layers,layers);
+
+    if (!Object.is(Canvas.layers, CONFIG.Canvas.layers)) {
+        const layers = Canvas.layers;
+        Object.defineProperty(Canvas, 'layers', {
+            get: function () {
+                return foundry.utils.mergeObject(layers, CONFIG.Canvas.layers)
+            }
+        })
+    }
 }
 
 function DEBUG(message){
@@ -138,9 +146,8 @@ async function updatedisplay(diceinpool){
         });
     }
 
-    let displaywidth = $( "#TensionDice-Poolsect" ).width()
-
-    let display = document.getElementById("TensionDice-Pool");
+    let chatpool = document.getElementById("TensionDice-Pool-chat");
+    let popoutchatpool = document.getElementById("TensionDice-Pool-chatpopout");
     let pool = 'Tension Pool:';
     let i;
     let iz=0;
@@ -152,7 +159,6 @@ async function updatedisplay(diceinpool){
         if ((iz===9) && !(iz===diceinpool)){
             pool+='<br>'
         }
-
     }
 
     for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
@@ -160,20 +166,43 @@ async function updatedisplay(diceinpool){
         iz+=1;
     }
 
+    if ((chatpool!==null)){
+        chatpool.innerHTML = pool;
+    }
 
-    display.innerHTML = pool;
+    if ((popoutchatpool!==null)){
+        popoutchatpool.innerHTML = pool;
+    }
 }
 
 Hooks.on("renderChatLog", (app, html) => {
-    let pool = '<p id="TensionDice-Pool" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>'
-
-    let footer = html.find(".directory-footer");
-
-    if (footer.length === 0) {
-    footer = $(`<footer class="directory-footer" id="TensionDice-Poolsect"></footer>`);
-    html.append(footer);
+    let chatpanel = document.getElementById("chat");
+    let chatpopoutpanel = document.getElementById("chat-popout");
+    if ((chatpopoutpanel!==null)){
+        chatpopoutpanel = chatpopoutpanel.querySelectorAll('[data-tab="chat"]')[0];
     }
-    footer.append(pool);
+
+    let chatpanelfooter = document.getElementById("TensionDice-Poolsect-chat");
+    let chatpopoutpanelfooter = document.getElementById("TensionDice-Poolsect-chatpopout");
+
+    let chatfooterhtml = `<section class="directory-footer" id="TensionDice-Poolsect-chat" style="flex:none">
+<p id="TensionDice-Pool-chat" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>
+</section>`;
+    let chatpopoutfooterhtml = `<section class="directory-footer" id="TensionDice-Poolsect-chatpopout" style="flex:none">
+<p id="TensionDice-Pool-chatpopout" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>
+</section>`;
+
+
+    if ((chatpanel!==null) && (chatpanelfooter===null)){
+        chatpanel.innerHTML += chatfooterhtml
+    }
+
+    if ((chatpopoutpanel!==null) && (chatpopoutpanelfooter===null)){
+        chatpopoutpanel.innerHTML += chatpopoutfooterhtml
+    }
+
+    /*chat-popout*/
+    /*chat*/
 
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
     updatedisplay(diceinpool);
@@ -598,6 +627,7 @@ Hooks.on('updateWorldTime', async (timestamp,stepsize) => {
         await processtimeupdate()
     }
 });
+
 
 
 Hooks.on("getSceneControlButtons", (controls) => {

@@ -7,9 +7,8 @@ export class TensionLayer extends PlaceablesLayer {
     return foundry.utils.mergeObject(super.layerOptions, {
       name: "TensionLayer",
       canDragCreate: false,
-      zIndex: 180
+      zIndex: 4545
     });
   }
-
   static documentName = "Tile";
 }
