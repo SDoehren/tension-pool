@@ -176,33 +176,19 @@ async function updatedisplay(diceinpool){
 }
 
 Hooks.on("renderChatLog", (app, html) => {
-    let chatpanel = document.getElementById("chat");
-    let chatpopoutpanel = document.getElementById("chat-popout");
-    if ((chatpopoutpanel!==null)){
-        chatpopoutpanel = chatpopoutpanel.querySelectorAll('[data-tab="chat"]')[0];
-    }
-
-    let chatpanelfooter = document.getElementById("TensionDice-Poolsect-chat");
-    let chatpopoutpanelfooter = document.getElementById("TensionDice-Poolsect-chatpopout");
-
-    let chatfooterhtml = `<section class="directory-footer" id="TensionDice-Poolsect-chat" style="flex:none">
+    let chatfooterhtml = `<footer class="directory-footer" id="TensionDice-Poolsect-chat" style="flex:none">
 <p id="TensionDice-Pool-chat" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>
-</section>`;
-    let chatpopoutfooterhtml = `<section class="directory-footer" id="TensionDice-Poolsect-chatpopout" style="flex:none">
+</footer>`;
+    let chatpopoutfooterhtml = `<footer class="directory-footer" id="TensionDice-Poolsect-chatpopout" style="flex:none">
 <p id="TensionDice-Pool-chatpopout" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>
-</section>`;
+</footer>`;
 
 
-    if ((chatpanel!==null) && (chatpanelfooter===null)){
-        chatpanel.innerHTML += chatfooterhtml
+    if (html[0].className.includes('popout')){
+        html.append(chatpopoutfooterhtml)
+    } else {
+        html.append(chatfooterhtml)
     }
-
-    if ((chatpopoutpanel!==null) && (chatpopoutpanelfooter===null)){
-        chatpopoutpanel.innerHTML += chatpopoutfooterhtml
-    }
-
-    /*chat-popout*/
-    /*chat*/
 
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
     updatedisplay(diceinpool);

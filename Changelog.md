@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0057 
+
+- Resolved issue with Tension Pool disabling the ability to clear chat.
+
 #### 0056 -V9 Compatibility Release
 
 - Issue with chat pop out resolved

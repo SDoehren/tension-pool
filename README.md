@@ -95,6 +95,10 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
+#### 0057 
+
+- Resolved isssue with Tension Pool disabling the ability to clear chat.
+
 #### 0056 -V9 Compatibility Release
 
 - Issue with chat pop out resolved
@@ -103,11 +107,6 @@ Hook Calls and API are available [here](api.md)
 
 - Fixed issue with settings menu being visible to players
 - Fixed issue with Tension Timer sometimes double rolling
-
-#### 0054
-
-- Implemented bug fix causing errors when switching to scene with notes
-- Implemented a number of changes from [thalissa's fork](https://github.com/thalissa/tension-pool)
 
 
 
