@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0058  
+
+- Added option to use Tension Pool without Dice So Nice
+
 #### 0057 
 
 - Resolved issue with Tension Pool disabling the ability to clear chat.

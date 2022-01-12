@@ -126,11 +126,29 @@ Hooks.on("ready", () => {
 
     if (game.settings.get("tension-pool", "LatestVersion")!==game.modules.get("tension-pool").data.version && game.user.isGM){
         let message = "Hi,<br>Thanks for installing/updating Tension Pool" +
-            "<br>If you previously set a Macro to run on complication this setting will need reseting.<br>" +
+            "<br>Dice so nice is no longer a dependancy of Tension Pool.  If you wish to see the Tension Dice/Pool visually you will need to manually install and activate Dice So Nice (this is the recommended experience).<br>" +
             "<br>This message will not be shown again.<br><br>" +
             "All the best,<br>SDoehren<br>Discord Server: https://discord.gg/QNQZwGGxuN"
-        /*ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});*/
+        ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
         game.settings.set("tension-pool", "LatestVersion",game.modules.get("tension-pool").data.version)
+    }
+
+    if (game.settings.get("tension-pool",'VisualDiceEffects')) {
+        if (game.modules.get("dice-so-nice")===undefined) {
+            let message = "<br>Currently you do not have Dice So Nice installed but have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
+            ChatMessage.create({
+                whisper: ChatMessage.getWhisperRecipients("GM"),
+                content: message,
+                speaker: ChatMessage.getSpeaker({alias: "Tension Pool"})
+            }, {});
+        } else if (!game.modules.get("dice-so-nice").active){
+            let message = "<br>Currently you do not have Dice So Nice enabled but have the Visual Dice Effects Enabled.  Please enable Dice So Nice to use the visual effects."
+            ChatMessage.create({
+                whisper: ChatMessage.getWhisperRecipients("GM"),
+                content: message,
+                speaker: ChatMessage.getSpeaker({alias: "Tension Pool"})
+            }, {});
+        }
     }
 
     console.log('tension-pool | Ready');
@@ -239,7 +257,8 @@ async function adddie(message=undefined,count=1){
         }
     }
 
-    if ((game.settings.get("tension-pool",'dropdie')) && (diceinpool < game.settings.get("tension-pool", 'maxdiceinpool'))){
+
+    if ((game.settings.get("tension-pool",'VisualDiceEffects')) &&(game.settings.get("tension-pool",'dropdie')) && (diceinpool < game.settings.get("tension-pool", 'maxdiceinpool'))){
 
         let dicesize = game.settings.get("tension-pool",'dicesize');
         let Ro = new Roll(count+dicesize);
@@ -329,7 +348,9 @@ async function rollpool(dice,message,dicesize){
             users = null;
         }
 
-        await game.dice3d.showForRoll(Ro, game.user, true, users)
+        if (game.settings.get("tension-pool",'VisualDiceEffects')) {
+            await game.dice3d.showForRoll(Ro, game.user, true, users)
+        }
 
         let outcome = Ro.terms[0].results.map(d => d.result).sort()
         console.log(outcome);

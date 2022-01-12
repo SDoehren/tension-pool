@@ -61,6 +61,7 @@ export class TensionConfig extends FormApplication {
             scenecontrolAUTO: game.settings.get('tension-pool', 'scenecontrolAUTO'),
             WhisperResult: game.settings.get('tension-pool', 'WhisperResult'),
             Debug: game.settings.get('tension-pool', 'Debug'),
+            VisualDiceEffects: game.settings.get('tension-pool', 'VisualDiceEffects'),
         }
 
         return data

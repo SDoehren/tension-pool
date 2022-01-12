@@ -225,6 +225,11 @@ export const registerSettings = function () {
         scope: "world", config: false, default: true, type: Boolean
     });
 
+    game.settings.register("tension-pool", "VisualDiceEffects", {
+        name: "Enable Visual Dice Effects",
+        scope: "world", config: false, default: true, type: Boolean
+    });
+
     game.settings.register("tension-pool", "Debug", {
         name: "Turn on Debug",
         scope: "world", config: false, default: false, type: Boolean
