@@ -80,6 +80,8 @@ export class TensionConfig extends FormApplication {
             if (v!==oldval){
                 if (k.search("scenecontrol")>=0){
                     reset=true
+                } else if (k.search("VisualDiceEffects")>=0){
+                    reset=true
                 }
             }
         }

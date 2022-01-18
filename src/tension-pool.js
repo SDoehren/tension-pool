@@ -135,14 +135,14 @@ Hooks.on("ready", () => {
 
     if (game.settings.get("tension-pool",'VisualDiceEffects')) {
         if (game.modules.get("dice-so-nice")===undefined) {
-            let message = "<br>Currently you do not have Dice So Nice installed but have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
+            let message = "Currently you do not have Dice So Nice installed but have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
             ChatMessage.create({
                 whisper: ChatMessage.getWhisperRecipients("GM"),
                 content: message,
                 speaker: ChatMessage.getSpeaker({alias: "Tension Pool"})
             }, {});
         } else if (!game.modules.get("dice-so-nice").active){
-            let message = "<br>Currently you do not have Dice So Nice enabled but have the Visual Dice Effects Enabled.  Please enable Dice So Nice to use the visual effects."
+            let message = "Currently you do not have Dice So Nice enabled but have the Visual Dice Effects Enabled.  Please enable Dice So Nice to use the visual effects."
             ChatMessage.create({
                 whisper: ChatMessage.getWhisperRecipients("GM"),
                 content: message,
