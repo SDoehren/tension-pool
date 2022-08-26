@@ -1,5 +1,10 @@
 # Change Log
 
+#### 0059
+
+- Fixed issue with players not being shown dice drops.
+
+
 #### 0058  
 
 - Added option to use Tension Pool without Dice So Nice
