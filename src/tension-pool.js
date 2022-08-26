@@ -263,7 +263,7 @@ async function adddie(message=undefined,count=1){
         let dicesize = game.settings.get("tension-pool",'dicesize');
         let Ro = new Roll(count+dicesize);
         await Ro.evaluate({async:true})
-        game.dice3d.showForRoll(Ro, game.user, false, null);
+        game.dice3d.showForRoll(Ro, game.user, true, null);
     }
 
     game.settings.set("tension-pool",'diceinpool',diceinpool);
