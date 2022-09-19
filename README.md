@@ -95,22 +95,6 @@ Hook Calls and API are available [here](api.md)
 
 [Change log](Changelog.md)
 
-#### 0057 
-
-- Resolved isssue with Tension Pool disabling the ability to clear chat.
-
-#### 0056 -V9 Compatibility Release
-
-- Issue with chat pop out resolved
-
-#### 0055
-
-- Fixed issue with settings menu being visible to players
-- Fixed issue with Tension Timer sometimes double rolling
-
-
-
-
 
 ### Licence
 
