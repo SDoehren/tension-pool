@@ -1,5 +1,12 @@
 # Change Log
 
+#### 0060 - V10 Compatibility Release
+
+- V10 compatibility added.
+- Scene Controls removed.
+- Macro Compendium added.
+- API updated.
+
 #### 0059
 
 - Fixed issue with players not being shown dice drops.
@@ -13,7 +20,7 @@
 
 - Resolved issue with Tension Pool disabling the ability to clear chat.
 
-#### 0056 -V9 Compatibility Release
+#### 0056 - V9 Compatibility Release
 
 - Issue with chat pop out resolved
 

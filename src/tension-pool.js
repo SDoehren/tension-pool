@@ -1,30 +1,10 @@
 import {registerSettings} from './settings.js';
 import { TensionConfig } from './TensionConfig.js';
 import {TensionDie} from './die.js';
-import {TensionLayer} from './tensionLayer.js';
 import {displaypopup} from './popup.js';
 
 'use strict';
 
-function registerLayer() {
-    const layers = {
-            TensionLayer: {
-                layerClass: TensionLayer,
-                group: "effects"
-            }
-    }
-
-    CONFIG.Canvas.layers = mergeObject(Canvas.layers,layers);
-
-    if (!Object.is(Canvas.layers, CONFIG.Canvas.layers)) {
-        const layers = Canvas.layers;
-        Object.defineProperty(Canvas, 'layers', {
-            get: function () {
-                return foundry.utils.mergeObject(layers, CONFIG.Canvas.layers)
-            }
-        })
-    }
-}
 
 function DEBUG(message){
     if (game.settings.get("tension-pool",'Debug')) {
@@ -86,7 +66,6 @@ Hooks.once('init', async () => {
 
 
     registerSettings();
-    registerLayer();
     CONFIG.Dice.terms["t"] = TensionDie;
 });
 
@@ -126,8 +105,8 @@ Hooks.on("ready", () => {
 
     if (game.settings.get("tension-pool", "LatestVersion")!==game.modules.get("tension-pool").data.version && game.user.isGM){
         let message = "Hi,<br>Thanks for installing/updating Tension Pool" +
-            "<br>Dice so nice is no longer a dependancy of Tension Pool.  If you wish to see the Tension Dice/Pool visually you will need to manually install and activate Dice So Nice (this is the recommended experience).<br>" +
-            "<br>This message will not be shown again.<br><br>" +
+            "<br>Scene controls are no longer supported by Tension Pool and have instead been replaced by macros performing the same behaviours.<br>" +
+            "<br>This message will not be shown again until the next update.<br><br>" +
             "All the best,<br>SDoehren<br>Discord Server: https://discord.gg/QNQZwGGxuN"
         ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
         game.settings.set("tension-pool", "LatestVersion",game.modules.get("tension-pool").data.version)
@@ -230,7 +209,18 @@ async function removedie(){
     Hooks.call("tension-poolChange", diceinpool);
 }
 
-async function adddie(message=undefined,count=1){
+async function setpoolsize(diceinpool) {
+    if (!game.user.isGM) {
+        return;
+    }
+
+    game.settings.set("tension-pool",'diceinpool',diceinpool);
+    await updatedisplay(diceinpool);
+    Hooks.call("tension-poolChange", diceinpool);
+
+}
+
+async function adddie(message=undefined, count=1){
     if (!game.user.isGM) {
         return;
     }
@@ -267,8 +257,6 @@ async function adddie(message=undefined,count=1){
     }
 
     game.settings.set("tension-pool",'diceinpool',diceinpool);
-
-
     await updatedisplay(diceinpool);
     Hooks.call("tension-poolChange", diceinpool);
 
@@ -443,6 +431,142 @@ async function rollpool(dice,message,dicesize){
     return complication;
 }
 
+async function rollpoolandretain(dice,message,dicesize){
+    if (dice===0){
+        await sendmessage("Dice pool is empty and cannot be rolled")
+        return;
+    }
+
+    let gamepausedalready;
+    if (game.settings.get("tension-pool",'PauseDuringRoll') && !(game.paused)){
+        game.togglePause();
+        gamepausedalready = false;
+    } else {
+        gamepausedalready = true;
+    }
+
+
+    await updatedisplay(dice);
+    if (dice!==game.settings.get("tension-pool",'diceinpool')){
+        Hooks.call("tension-poolChange", dice);
+    }
+
+    await sendmessage(message);
+
+    if (dicesize===undefined) {
+        dicesize = game.settings.get("tension-pool",'dicesize');
+    }
+
+    let Ro = new Roll(dice+dicesize);
+    await Ro.evaluate({async:true})
+
+    let complication;
+
+    if (dicesize==="df"){
+        let message = "Tension Pool"
+        Ro.toMessage({flavor: message},{},true)
+    } else if (game.settings.get("tension-pool",'outputsum')){
+        let message = "Tension Pool"
+        Ro.toMessage({flavor: message},{},true)
+    } else {
+        let users;
+
+        if (game.settings.get("tension-pool",'WhisperResult')) {
+            users = [game.user];
+        } else {
+            users = null;
+        }
+
+        if (game.settings.get("tension-pool",'VisualDiceEffects')) {
+            await game.dice3d.showForRoll(Ro, game.user, true, users)
+        }
+
+        let outcome = Ro.terms[0].results.map(d => d.result).sort()
+        console.log(outcome);
+        var i;
+        complication = false
+        let compcount = 0
+
+        let rolltext = ""
+        let outcometext = "&nbsp;"
+
+        for (i = 0; i < outcome.length; i++) {
+            if (outcome[i] === 1) {
+                complication = true
+                compcount += 1
+                outcometext += "!"
+                rolltext += '<li class="roll die ' + dicesize + ' min">!</li>'
+            } else {
+                rolltext += '<li class="roll die ' + dicesize + '">&nbsp;</li>'
+            }
+        }
+
+        let mess;
+        if (complication) {
+            mess = game.settings.get("tension-pool", 'DangerMessage')
+        } else {
+            mess = game.settings.get("tension-pool", 'SafeMessage')
+        }
+
+
+        mess += `<div class="dice-roll">
+                    <div class="dice-result">
+                        <div class="dice-formula">`
+        mess += dice
+        mess += ` </div>
+                        <div class="dice-tooltip" style="display: none;">
+                            <section class="tooltip-part">
+                                <div class="dice">
+                                    <header class="part-header flexrow">
+                                        <span class="part-formula">`
+        mess += dice
+        mess += ` dice in pool</span>
+                                        <span class="part-total">` + compcount + `</span>
+                                    </header>
+                                    <ol class="dice-rolls">`
+        mess += rolltext
+        mess += `</ol>
+                                </div>
+                            </section>
+                        </div>
+                    <h4 class="dice-total">` + outcometext + `</h4>
+                </div>
+            </div>`
+
+
+        sendresult(mess)
+    }
+
+    Hooks.call("tension-poolRolled", dice,game.settings.get("tension-pool",'diceinpool'),complication);
+
+    Hooks.call("tension-poolChange", game.settings.get("tension-pool", 'diceinpool'));
+    await updatedisplay(game.settings.get("tension-pool", 'diceinpool'));
+
+    let pausedduetocomplication = false;
+    if (complication){
+        if (game.settings.get("tension-pool", "PauseOnComplication")){
+            if (!game.paused) {
+                game.togglePause();
+            }
+            pausedduetocomplication = true;
+        }
+
+        if (game.settings.get("tension-pool",'MacroOnComplication')) {
+            runmacro(game.settings.get("tension-pool",'MacroName'))
+        }
+
+    }
+
+    console.log(game.settings.get("tension-pool",'PauseDuringRoll'),game.paused,!gamepausedalready,pausedduetocomplication)
+    if (game.settings.get("tension-pool",'PauseDuringRoll') && (game.paused) && !(gamepausedalready) && !(pausedduetocomplication)){
+        game.togglePause();
+    }
+
+    return complication;
+}
+
+
+
 async function runmacro(macroname){
 
     let targetmacro = game.macros.filter(x => x.name===macroname);
@@ -590,7 +714,7 @@ async function TensionTimerConfig() {
 }
 
 async function processtimeupdate(){
-    let gameTimeRatio = game.settings.get('foundryvtt-simple-calendar', "time-configuration").gameTimeRatio
+    let gameTimeRatio = SimpleCalendar.api.getTimeConfiguration().gameTimeRatio
 
     if (game.settings.get("tension-pool", "autodiceaddactive")  && game.user.isGM) {
         let nextdrop = game.settings.get("tension-pool", "lastautodiceadd") + game.settings.get("tension-pool", "secsautodiceadd")
@@ -632,78 +756,6 @@ async function processtimeupdate(){
 Hooks.on('updateWorldTime', async (timestamp,stepsize) => {
     if (stepsize > 0) {
         await processtimeupdate()
-    }
-});
-
-
-
-Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.user.isGM  && game.settings.get("tension-pool",'scenecontrols')) {
-        controls.push({
-            name: "Tension Pool Controls",
-            title: "Tension Pool Controls",
-            icon: "fas fa-dice",
-            layer: "TensionLayer",
-            visible: game.user.isGM,
-            tools: [
-                {
-                    name: "tension-pool-removedie",
-                    title: "Remove Die from Pool",
-                    icon: "fas fa-minus-square",
-                    onClick: () => removedie(),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolRemove')),
-                    button: true
-                },
-                {
-                    name: "tension-pool-adddie",
-                    title: "Add Die to Pool",
-                    icon: "fas fa-plus-square",
-                    onClick: () => adddie(),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolADD')),
-                    button: true
-                },
-                {
-                    name: "tension-pool-adddieroll",
-                    title: "Add Die and Roll Pool",
-                    icon: "fas fa-plus-circle",
-                    onClick: () => addandrollpool(),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolADDROLL')),
-                    button: true
-                },
-                {
-                    name: "tension-pool-emptypool",
-                    title: "Empty the Pool (no roll)",
-                    icon: "fas fa-battery-empty",
-                    onClick: () => emptypool(),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolEMPTY')),
-                    button: true
-                },
-                {
-                    name: "tension-pool-rollpool",
-                    title: "Roll Dice Pool",
-                    icon: "fas fa-dice-six",
-                    onClick: () => rollpool(game.settings.get("tension-pool", 'diceinpool'), "Dice Pool Rolled"),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolROLL')),
-                    button: true
-                },
-                {
-                    name: "tension-pool-rollfullpool",
-                    title: "Roll Full Dice Pool",
-                    icon: "fas fa-dice",
-                    onClick: () => rollpool(game.settings.get("tension-pool", 'maxdiceinpool'), "Dice Pool Filled, Rolled and Emptied"),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolROLLFULL')),
-                    button: true
-                },
-                {
-                    name: "tension-pool-autoadd",
-                    title: "Tension Timer",
-                    icon: "fas fa-clock",
-                    onClick: () => TensionTimerConfig(),
-                    visible: (game.user.isGM && game.settings.get("tension-pool",'scenecontrolAUTO')),
-                    button: true
-                },
-            ],
-        });
     }
 });
 
@@ -757,6 +809,14 @@ Hooks.on("chatCommandsReady", function(chatCommands) {
 
 export class Tension {
 
+    async rollfullpoolandreadd(){
+        await rollpoolandretain(game.settings.get("tension-pool", 'maxdiceinpool'),"Dice Pool Filled and Rolled")
+    }
+
+    async TensionTimerConfig(){
+        TensionTimerConfig()
+    }
+
     async adddie(message=undefined){
         await adddie(message=message)
     }
@@ -776,6 +836,9 @@ export class Tension {
     async rollfullpool(){
         await rollpool(game.settings.get("tension-pool", 'maxdiceinpool'), "Dice Pool Filled, Rolled and Emptied")
     }
+
+
+
     /**
      * Rolls a custom dice pool
      *

@@ -51,4 +51,22 @@ All pool rolls return a Promise<boolean> that resolves true if a complication wa
 
 For example `game.tension.rollcustompool(10,"Custom Pool Rolling","d20")` will roll 10d20 and will display the message "Tension Pool | Custom Pool Rolling"
 
+#### Tension Timer
 
+`game.tension.TensionTimerConfig()` (async)  takes no args and simply loads the Tension Timer dialog.
+
+Tension Timer requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module); Simple Calendar is not a dependency so needs to be installed and activated separately.  
+Setting a Tension Timer will lead to a die being dropped in regular intervals based on the in game clock.
+
+To set a timer open the timer configure using the scene controls.  
+Pick the interval you wish to use in _in game_ seconds (default: 600).  
+Hit start timer and the Tension Timer will automatically drop dice as appropriate.
+The simple calendar must be running for dice to drop.
+
+![Image](images/tensiontimer1.webp)
+
+To replace or stop a timer, open the timer configure using the scene controls and choose the appropriate option.
+
+![Image](images/tensiontimer2.webp)
+
+There are known issues with the Tension Timer that will not be fixed.

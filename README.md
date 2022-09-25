@@ -9,9 +9,6 @@
 [![Github Releases (by Release)](https://img.shields.io/github/downloads/sdoehren/tension-pool/latest/total.svg)](https://GitHub.com/sdoehren/tension-pool/releases/)
 
 [![ko-fi](https://img.shields.io/badge/ko--fi-Support%20Me-red?style=flat-square&logo=ko-fi)](https://ko-fi.com/sdoehren)
-[![Patreon](https://img.shields.io/badge/Patreon-Support%20Me-red?style=flat-square&logo=patreon)](https://www.patreon.com/bePatron?u=49614365)
-[![Patreon](https://img.shields.io/badge/Crypto-Support-red?style=flat-square)](https://sdoehren.github.io/support.html)
-
 
 [![The Forge](https://img.shields.io/badge/The%20Forge-Pay%20What%20You%20Want-success?style=flat-square)](https://eu.forge-vtt.com/bazaar#package=tension-pool)
 
@@ -25,32 +22,13 @@ Alternatively install via the manifest url: https://github.com/SDoehren/tension-
 
 ## Instructions
 
-Tension Pool can be controlled from scene controls
-
-![Image](images/Guide1.webp)
-
-Alternatively, click the pool to add a die
+The simpliest way to use Tension Die is to click the pool to add a die, which will roll atomatically when it is filled.
 
 ![Image](images/Guide2.webp)
 
+There is a compendium of macros installed with the module for more complicated controls; these simply call the API. 
+
 Or use [chat commands](https://github.com/SDoehren/tension-pool#chat-commands)
-
-### Tension Timer
-
-Tension Timer requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module); Simple Calendar is not a dependency so needs to be installed and activated separately.  
-Setting a Tension Timer will lead to a die being dropped in regular intervals based on the in game clock.
-
-To set a timer open the timer configure using the scene controls.  
-Pick the interval you wish to use in _in game_ seconds (default: 600).  
-Hit start timer and the Tension Timer will automatically drop dice as appropriate.
-The simple calendar must be running for dice to drop.
-
-![Image](images/tensiontimer1.webp)
-
-To replace or stop a timer, open the timer configure using the scene controls and choose the appropriate option.
-
-![Image](images/tensiontimer2.webp)
-
 
 ## Chat Commands
 
