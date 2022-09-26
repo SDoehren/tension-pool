@@ -1,5 +1,10 @@
 # Change Log
 
+#### 0061 - Upcoming
+
+- module.json updated to remove warning as per [redeux1 update](https://github.com/SDoehren/tension-pool/pull/35)
+- Expected Complications per 100 dice added to pool added to README.md
+
 #### 0060 - V10 Compatibility Release
 
 - V10 compatibility added.
@@ -9,7 +14,7 @@
 
 #### 0059
 
-- Fixed issue with players not being shown dice drops.
+- Fixed issue with players not being shown dice drops as per [bjornestol update](https://github.com/SDoehren/tension-pool/pull/33)
 
 
 #### 0058  
