@@ -253,7 +253,17 @@ async function adddie(message=undefined, count=1){
         let dicesize = game.settings.get("tension-pool",'dicesize');
         let Ro = new Roll(count+dicesize);
         await Ro.evaluate({async:true})
-        game.dice3d.showForRoll(Ro, game.user, true, null);
+        if ((game.modules.get("dice-so-nice")===undefined) || (!game.modules.get("dice-so-nice").active)){
+            let message = "Currently you do not have Dice So Nice installed, or it is not enabled, but you have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
+            ChatMessage.create({
+                whisper: ChatMessage.getWhisperRecipients("GM"),
+                content: message,
+                speaker: ChatMessage.getSpeaker({alias: "Tension Pool"})
+            }, {});
+        } else {
+            game.dice3d.showForRoll(Ro, game.user, true, null);
+        }
+
     }
 
     game.settings.set("tension-pool",'diceinpool',diceinpool);
@@ -337,7 +347,16 @@ async function rollpool(dice,message,dicesize){
         }
 
         if (game.settings.get("tension-pool",'VisualDiceEffects')) {
-            await game.dice3d.showForRoll(Ro, game.user, true, users)
+            if ((game.modules.get("dice-so-nice") === undefined) || (!game.modules.get("dice-so-nice").active)) {
+                let message = "Currently you do not have Dice So Nice installed, or it is not enabled, but you have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
+                ChatMessage.create({
+                    whisper: ChatMessage.getWhisperRecipients("GM"),
+                    content: message,
+                    speaker: ChatMessage.getSpeaker({alias: "Tension Pool"})
+                }, {});
+            } else {
+                await game.dice3d.showForRoll(Ro, game.user, true, users)
+            }
         }
 
         let outcome = Ro.terms[0].results.map(d => d.result).sort()
@@ -478,7 +497,16 @@ async function rollpoolandretain(dice,message,dicesize){
         }
 
         if (game.settings.get("tension-pool",'VisualDiceEffects')) {
-            await game.dice3d.showForRoll(Ro, game.user, true, users)
+            if ((game.modules.get("dice-so-nice") === undefined) || (!game.modules.get("dice-so-nice").active)) {
+                let message = "Currently you do not have Dice So Nice installed, or it is not enabled, but you have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
+                ChatMessage.create({
+                    whisper: ChatMessage.getWhisperRecipients("GM"),
+                    content: message,
+                    speaker: ChatMessage.getSpeaker({alias: "Tension Pool"})
+                }, {});
+            } else {
+                await game.dice3d.showForRoll(Ro, game.user, true, users)
+            }
         }
 
         let outcome = Ro.terms[0].results.map(d => d.result).sort()

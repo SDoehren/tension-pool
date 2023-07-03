@@ -2,13 +2,13 @@
   "name": "tension-pool",
   "title": "Tension Pool",
   "description": "Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of Time Pools/Tension Pools",
-  "version": "0061",
+  "version": "0062",
   "authors": [{"name": "SDoehren"}],
   "esmodules": ["src/tension-pool.js"],
   "compatibility": {
-    "minimum": "9",
-    "verified": "10",
-    "maximum": "10"
+    "minimum": "11",
+    "verified": "11",
+    "maximum": "11"
   },
   "url": "https://github.com/SDoehren/tension-pool",
   "manifest": "https://github.com/SDoehren/tension-pool/releases/latest/download/module.json",
