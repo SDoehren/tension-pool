@@ -34,19 +34,7 @@ The simpliest way to use Tension Die is to click the pool to add a die, which wi
 
 ![Image](images/Guide2.webp)
 
-There is a compendium of macros installed with the module for more complicated controls; these simply call the API. 
-
-Or use [chat commands](https://github.com/SDoehren/tension-pool#chat-commands)
-
-## Chat Commands
-
-- /TPadddie - Adds a Die to the Pool
-- /TPremovedie - Remove Die from Pool
-- /TPemptypool - Empty the Pool (no roll)
-- /TProllpool - Roll the Dice Pool
-- /TProllfullpool - Fill and Roll the Dice Pool
-
-
+There is a compendium of macros installed with the module for more complicated controls; these simply call the API.
 
 ## Hook Calls and API
 

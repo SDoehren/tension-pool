@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0063 - Chat Command Support Removed
+
+- Chat Commands seems to be depreciated and so has been removed.
+
 #### 0062 - V11 Compatibility Release
 
 - V11 compatibility added.
