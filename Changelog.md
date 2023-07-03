@@ -1,5 +1,10 @@
 # Change Log
 
+#### 0062 - V11 Compatibility Release
+
+- V11 compatibility added.
+- Error handling when Dice So Nice not installed/enabled improved.
+
 #### 0061 - Upcoming
 
 - module.json updated to remove warning as per [redeux1 update](https://github.com/SDoehren/tension-pool/pull/35)

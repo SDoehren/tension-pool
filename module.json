@@ -3,8 +3,14 @@
   "title": "Tension Pool",
   "description": "Tension Pool is a Foundry Implementation and Evolution of the Angry GM's idea of Time Pools/Tension Pools",
   "version": "0062",
-  "authors": [{"name": "SDoehren"}],
-  "esmodules": ["src/tension-pool.js"],
+  "authors": [
+    {
+      "name": "SDoehren"
+    }
+  ],
+  "esmodules": [
+    "src/tension-pool.js"
+  ],
   "compatibility": {
     "minimum": "11",
     "verified": "11",
@@ -12,7 +18,7 @@
   },
   "url": "https://github.com/SDoehren/tension-pool",
   "manifest": "https://github.com/SDoehren/tension-pool/releases/latest/download/module.json",
-  "download": "https://github.com/SDoehren/tension-pool/releases/latest/download/tension-pool0060.zip",
+  "download": "https://github.com/SDoehren/always-centred/releases/latest/download/module.zip",
   "license": "CC-BY-NC-SA-4.0",
   "readme": "https://raw.githubusercontent.com/SDoehren/tension-pool/main/README.md",
   "socket": true,
@@ -21,18 +27,20 @@
     "allowBugReporter": true
   },
   "relationships": {
-    "requires": [{
-      "id": "_chatcommands",
-      "type": "module",
+    "requires": [
+      {
+        "id": "_chatcommands",
+        "type": "module",
         "manifest": "https://github.com/League-of-Foundry-Developers/Chat-Commands-Lib/releases/download/1.3.3/module.json"
       }
-    ]},
-  "packs": [
-        {
-            "name": "tension-pool",
-            "label": "Tension Pool",
-            "path": "./packs/tension-pool.db",
-            "type": "Macro"
-        }
     ]
+  },
+  "packs": [
+    {
+      "name": "tension-pool",
+      "label": "Tension Pool",
+      "path": "./packs/tension-pool.db",
+      "type": "Macro"
+    }
+  ]
 }
