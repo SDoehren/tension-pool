@@ -103,13 +103,13 @@ Hooks.on("ready", () => {
     }
 
 
-    if (game.settings.get("tension-pool", "LatestVersion")!==game.modules.get("tension-pool").data.version && game.user.isGM){
+    if (game.settings.get("tension-pool", "LatestVersion")!==game.modules.get("tension-pool").version && game.user.isGM){
         let message = "Hi,<br>Thanks for installing/updating Tension Pool" +
             "<br>Scene controls are no longer supported by Tension Pool and have instead been replaced by macros performing the same behaviours.<br>" +
             "<br>This message will not be shown again until the next update.<br><br>" +
             "All the best,<br>SDoehren<br>Discord Server: https://discord.gg/QNQZwGGxuN"
         ChatMessage.create({whisper:ChatMessage.getWhisperRecipients("GM"),content: message,speaker:ChatMessage.getSpeaker({alias: "Tension Pool"})}, {});
-        game.settings.set("tension-pool", "LatestVersion",game.modules.get("tension-pool").data.version)
+        game.settings.set("tension-pool", "LatestVersion",game.modules.get("tension-pool").version)
     }
 
     if (game.settings.get("tension-pool",'VisualDiceEffects')) {
