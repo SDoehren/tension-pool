@@ -71,6 +71,26 @@ Hook Calls and API are available [here](api.md)
 |     9     |  10.3  |  9.0   |  7.8   |   6.8   |   6.0   |   4.1   |   1.0    |
 |    10     |  9.4   |  8.4   |  7.4   |   6.5   |   5.8   |   4.0   |   1.0    |
 
+## Development
+
+### Prerequisites
+
+- Docker and Docker Compose
+- A [Foundry VTT](https://foundryvtt.com) account with a license key
+
+### Setup
+
+1. Clone the repository
+2. Copy `.env.example` to `.env` and fill in your Foundry VTT credentials and license key
+3. Run `docker compose up -d`
+4. Open `http://localhost:30000` and accept the license
+5. Create a world and install the "Dice So Nice" module via Foundry's module browser
+6. Enable both "Tension Pool" and "Dice So Nice" in the world's module settings
+
+The module is bind-mounted into the container, so code changes are reflected on browser refresh.
+
+Use `docker compose down` to stop and `docker compose restart` to restart.
+
 ## Change log
 
 [Change log](Changelog.md)
