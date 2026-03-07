@@ -172,17 +172,16 @@ async function updatedisplay(diceinpool){
     }
 }
 
-function createTensionPoolDisplay() {
-    let chatForm = document.querySelector("#chat.chat-sidebar .chat-form");
+function createTensionPoolDisplay(chatForm, id) {
     if (!chatForm) return;
-    if (document.getElementById("TensionDice-Poolsect-chat")) return;
+    if (document.getElementById("TensionDice-Poolsect-" + id)) return;
 
     let footer = document.createElement('div');
-    footer.id = "TensionDice-Poolsect-chat";
+    footer.id = "TensionDice-Poolsect-" + id;
     footer.style.cssText = "flex: 0 0 auto; cursor: pointer; border-top: 1px solid var(--color-border-light, #999); padding: 4px 0; text-align: center;";
 
     let p = document.createElement('p');
-    p.id = "TensionDice-Pool-chat";
+    p.id = "TensionDice-Pool-" + id;
     p.style.cssText = "display: flex; align-items: center; justify-content: center; flex-flow: row wrap; margin: 0; padding: 4px 0;";
     p.textContent = "Tension Pool:";
 
@@ -195,9 +194,17 @@ function createTensionPoolDisplay() {
     updatedisplay(diceinpool);
 }
 
-Hooks.on("renderChatLog", () => {
-    createTensionPoolDisplay();
-})
+function initTensionPoolDisplays() {
+    let mainForm = document.querySelector("#chat.chat-sidebar .chat-form");
+    createTensionPoolDisplay(mainForm, "chat");
+
+    let popoutForm = document.querySelector(".sidebar-popout.chat-sidebar .chat-form");
+    createTensionPoolDisplay(popoutForm, "chatpopout");
+}
+
+Hooks.on("renderChatLog", initTensionPoolDisplays);
+Hooks.on("renderChatInput", initTensionPoolDisplays);
+Hooks.on("changeSidebarTab", initTensionPoolDisplays);
 
 async function removedie(){
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
