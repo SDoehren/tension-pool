@@ -151,7 +151,7 @@ async function updatedisplay(diceinpool){
 
 
     for (i = 0; i < diceinpool; i++) {
-        pool+='<img src="modules/tension-pool/images/Danger_black.webp" alt="!" width="25" height="25">'
+        pool+='<img src="modules/tension-pool/images/Danger_black.webp" alt="!" width="25" height="25" style="border: 1px solid #000; margin: 1px;">'
         iz+=1;
         if ((iz===9) && !(iz===diceinpool)){
             pool+='<br>'
@@ -159,7 +159,7 @@ async function updatedisplay(diceinpool){
     }
 
     for (i = 0; i < game.settings.get("tension-pool",'maxdiceinpool')-diceinpool; i++) {
-        pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="X" width="25" height="25">'
+        pool+='<img src="modules/tension-pool/images/EmptyDie.webp" alt="X" width="25" height="25" style="border: 1px solid #000; margin: 1px;">'
         iz+=1;
     }
 
@@ -172,24 +172,31 @@ async function updatedisplay(diceinpool){
     }
 }
 
-Hooks.on("renderChatLog", (app, html) => {
-    let chatfooterhtml = `<footer class="directory-footer" id="TensionDice-Poolsect-chat" style="flex:none">
-<p id="TensionDice-Pool-chat" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>
-</footer>`;
-    let chatpopoutfooterhtml = `<footer class="directory-footer" id="TensionDice-Poolsect-chatpopout" style="flex:none">
-<p id="TensionDice-Pool-chatpopout" style="display: flex;align-items: center;justify-content: center;position: relative;flex-flow: row wrap" onclick="game.tension.adddie()">Tension Pool:</p>
-</footer>`;
+function createTensionPoolDisplay() {
+    let chatForm = document.querySelector("#chat.chat-sidebar .chat-form");
+    if (!chatForm) return;
+    if (document.getElementById("TensionDice-Poolsect-chat")) return;
 
+    let footer = document.createElement('div');
+    footer.id = "TensionDice-Poolsect-chat";
+    footer.style.cssText = "flex: 0 0 auto; cursor: pointer; border-top: 1px solid var(--color-border-light, #999); padding: 4px 0; text-align: center;";
 
-    if (html[0].className.includes('popout')){
-        html.append(chatpopoutfooterhtml)
-    } else {
-        html.append(chatfooterhtml)
-    }
+    let p = document.createElement('p');
+    p.id = "TensionDice-Pool-chat";
+    p.style.cssText = "display: flex; align-items: center; justify-content: center; flex-flow: row wrap; margin: 0; padding: 4px 0;";
+    p.textContent = "Tension Pool:";
+
+    footer.appendChild(p);
+    chatForm.appendChild(footer);
+
+    footer.addEventListener("click", function() { game.tension.adddie(); });
 
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
     updatedisplay(diceinpool);
+}
 
+Hooks.on("renderChatLog", () => {
+    createTensionPoolDisplay();
 })
 
 async function removedie(){
@@ -252,7 +259,7 @@ async function adddie(message=undefined, count=1){
 
         let dicesize = game.settings.get("tension-pool",'dicesize');
         let Ro = new Roll(count+dicesize);
-        await Ro.evaluate({async:true})
+        await Ro.evaluate()
         if ((game.modules.get("dice-so-nice")===undefined) || (!game.modules.get("dice-so-nice").active)){
             let message = "Currently you do not have Dice So Nice installed, or it is not enabled, but you have the Visual Dice Effects Enabled.  Please install and enable Dice So Nice to use the visual effects."
             ChatMessage.create({
@@ -327,7 +334,7 @@ async function rollpool(dice,message,dicesize){
     }
 
     let Ro = new Roll(dice+dicesize);
-    await Ro.evaluate({async:true})
+    await Ro.evaluate()
 
     let complication;
 
@@ -477,7 +484,7 @@ async function rollpoolandretain(dice,message,dicesize){
     }
 
     let Ro = new Roll(dice+dicesize);
-    await Ro.evaluate({async:true})
+    await Ro.evaluate()
 
     let complication;
 
