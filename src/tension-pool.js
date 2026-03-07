@@ -189,6 +189,7 @@ function createTensionPoolDisplay(chatForm, id) {
     chatForm.appendChild(footer);
 
     footer.addEventListener("click", function() { game.tension.adddie(); });
+    footer.addEventListener("contextmenu", function(e) { e.preventDefault(); game.tension.removedie(); });
 
     let diceinpool = game.settings.get("tension-pool",'diceinpool');
     updatedisplay(diceinpool);

@@ -1,5 +1,9 @@
 # Change Log
 
+#### 0067 - Removed Tension Die
+
+- Added right-click to remove die from pool display.
+
 #### 0066 - V13 Compatibility Release
 
 - V13 compatibility added.
@@ -36,12 +40,11 @@
 
 - Fixed issue with players not being shown dice drops as per [bjornestol update](https://github.com/SDoehren/tension-pool/pull/33)
 
-
 #### 0058  
 
 - Added option to use Tension Pool without Dice So Nice
 
-#### 0057 
+#### 0057
 
 - Resolved issue with Tension Pool disabling the ability to clear chat.
 
@@ -59,7 +62,6 @@
 - Implemented bug fix causing errors when switching to scene with notes
 - Implemented a number of changes from [thalissa's fork](https://github.com/thalissa/tension-pool)
 
-
 #### 0053
 
 - Scene Control Buttons individually removable
@@ -69,7 +71,7 @@
 #### 0052 - Tension Timer
 
 - Tension Timer added (requires [Simple Calendar by vigoren](https://github.com/vigoren/foundryvtt-simple-calendar#installing-the-module))
-- Option to pause the game while the pool is being rolled added. 
+- Option to pause the game while the pool is being rolled added.
 
 #### 0051 - minor bug fix
 
@@ -129,3 +131,4 @@
 #### 0.0.02 - Initial
 
 - First Version
+
