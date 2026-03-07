@@ -9,7 +9,7 @@ export function displaypopup() {
 
 
     let d = new Dialog({
-        title: "Tension Pool Update " + game.modules.get("tension-pool").data.version,
+        title: "Tension Pool Update " + game.modules.get("tension-pool").version,
         content: post,
         buttons: {
             one: {
@@ -20,7 +20,7 @@ export function displaypopup() {
         },
         default: "one",
         render: html => console.log("Register interactivity in the rendered dialog"),
-        close: html => game.settings.set("tension-pool", "LatestVersion", game.modules.get("tension-pool").data.version)
+        close: html => game.settings.set("tension-pool", "LatestVersion", game.modules.get("tension-pool").version)
     });
     d.render(true);
 }

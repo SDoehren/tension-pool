@@ -1,5 +1,16 @@
 # Change Log
 
+#### 0066 - V13 Compatibility Release
+
+- V13 compatibility added.
+- Added required `id` field to module.json.
+- Replaced deprecated `mergeObject()` with `foundry.utils.mergeObject()`.
+- Replaced deprecated `nameAttr` with `valueAttr` in selectOptions helper.
+- Removed deprecated `{async:true}` from `Roll.evaluate()` calls.
+- Rewrote chat sidebar pool display for V13 ApplicationV2 changes.
+- Added borders to dice images for better visibility across themes.
+- Added Docker-based local development setup.
+
 #### 0063 - Chat Command Support Removed
 
 - Chat Commands seems to be depreciated and so has been removed.

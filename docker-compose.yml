@@ -1,0 +1,18 @@
+services:
+  foundryvtt:
+    image: felddy/foundryvtt:13
+    ports:
+      - "30000:30000"
+    environment:
+      - FOUNDRY_USERNAME=${FOUNDRY_USERNAME}
+      - FOUNDRY_PASSWORD=${FOUNDRY_PASSWORD}
+      - FOUNDRY_LICENSE_KEY=${FOUNDRY_LICENSE_KEY}
+      - FOUNDRY_ADMIN_KEY=admin
+      - CONTAINER_PRESERVE_CONFIG=true
+    volumes:
+      - foundry-data:/data
+      - ./:/data/Data/modules/tension-pool:ro
+    restart: unless-stopped
+
+volumes:
+  foundry-data:

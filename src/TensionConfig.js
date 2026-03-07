@@ -5,7 +5,7 @@
 
 export class TensionConfig extends FormApplication {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             title: game.i18n.localize("Tension Pool"),
             id: "tension-pool",
             template: "modules/tension-pool/templates/tension-config.html",
